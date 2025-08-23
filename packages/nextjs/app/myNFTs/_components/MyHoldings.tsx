@@ -5,7 +5,6 @@ import { NFTCard } from "./NFTCard";
 import { useAccount } from "wagmi";
 import { useScaffoldContract, useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
-import { getMetadataFromIPFS } from "~~/utils/simpleNFT/ipfs-fetch";
 import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
 
 export interface Collectible extends Partial<NFTMetaData> {
@@ -46,10 +45,18 @@ export const MyHoldings = () => {
           ]);
 
           const tokenURI = await yourCollectibleContract.read.tokenURI([tokenId]);
+          // Resolve tokenURI to a fetchable URL
+          const resolvedTokenUri = tokenURI.startsWith("ipfs://")
+            ? `https://ipfs.io/ipfs/${tokenURI.replace("ipfs://", "")}`
+            : tokenURI;
 
-          const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
+          // Fetch metadata JSON directly from resolved URL
+          const nftMetadata: NFTMetaData = await fetch(resolvedTokenUri).then(res => res.json());
 
-          const nftMetadata: NFTMetaData = await getMetadataFromIPFS(ipfsHash);
+          // Normalize image to https if it's ipfs:// for browser rendering
+          if (nftMetadata?.image?.startsWith && nftMetadata.image.startsWith("ipfs://")) {
+            nftMetadata.image = `https://ipfs.io/ipfs/${nftMetadata.image.replace("ipfs://", "")}`;
+          }
 
           collectibleUpdate.push({
             id: parseInt(tokenId.toString()),
