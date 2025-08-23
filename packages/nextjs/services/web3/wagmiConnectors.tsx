@@ -36,17 +36,23 @@ const wallets = [
 
 /**
  * wagmi connectors for the wagmi context
+ * Fast-Refresh safe: cache the connectors instance on globalThis to avoid
+ * re-initializing WalletConnect Core multiple times during HMR.
  */
-export const wagmiConnectors = connectorsForWallets(
-  [
+const g: any = globalThis as any;
+const connectorsSingleton =
+  g.__WALLET_CONNECTORS__ ||
+  (g.__WALLET_CONNECTORS__ = connectorsForWallets(
+    [
+      {
+        groupName: "Supported Wallets",
+        wallets,
+      },
+    ],
     {
-      groupName: "Supported Wallets",
-      wallets,
+      appName: "scaffold-eth-2",
+      projectId: scaffoldConfig.walletConnectProjectId,
     },
-  ],
+  ));
 
-  {
-    appName: "scaffold-eth-2",
-    projectId: scaffoldConfig.walletConnectProjectId,
-  },
-);
+export const wagmiConnectors = connectorsSingleton;
