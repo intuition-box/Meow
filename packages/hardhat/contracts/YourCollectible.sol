@@ -8,11 +8,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract YourCollectible is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     uint256 public tokenIdCounter;
+    
+    // Emitted for each minted token
+    event Minted(uint256 indexed tokenId, address indexed to, string uri);
 
     constructor() ERC721("YourCollectible", "YCB") Ownable(msg.sender) {}
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://ipfs.io/ipfs/";
+        return "";
     }
 
     function mintItem(address to, string memory uri) public returns (uint256) {
@@ -20,7 +23,17 @@ contract YourCollectible is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable 
         uint256 tokenId = tokenIdCounter;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
+        emit Minted(tokenId, to, uri);
         return tokenId;
+    }
+
+    // Batch mint multiple tokenURIs in a single transaction
+    function mintBatch(address to, string[] memory uris) public returns (uint256[] memory) {
+        uint256[] memory tokenIds = new uint256[](uris.length);
+        for (uint256 i = 0; i < uris.length; i++) {
+            tokenIds[i] = mintItem(to, uris[i]);
+        }
+        return tokenIds;
     }
 
     // Override functions from OpenZeppelin ERC721, ERC721Enumerable and ERC721URIStorage
