@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { MyHoldings } from "./_components";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
@@ -45,25 +46,37 @@ const MyNFTs: NextPage = () => {
   };
 
   return (
-    <>
-      <div className="flex items-center flex-col pt-10">
-        <div className="px-5">
-          <h1 className="text-center mb-8">
-            <span className="block text-4xl font-bold">My NFTs</span>
-          </h1>
+    <div className="container mx-auto px-4 pt-10 pb-24 min-h-screen flex flex-col">
+      <div className="flex-1">
+        <div className="flex items-center flex-col">
+          <div className="px-5">
+            <h1 className="text-center mb-8">
+              <span className="block text-4xl font-bold">My NFTs</span>
+            </h1>
+          </div>
         </div>
+        <div className="flex justify-center">
+          {!isConnected || isConnecting ? (
+            <RainbowKitCustomConnectButton />
+          ) : (
+            <button className="btn btn-secondary" onClick={handleMintItem}>
+              Mint NFT
+            </button>
+          )}
+        </div>
+        <MyHoldings />
       </div>
-      <div className="flex justify-center">
-        {!isConnected || isConnecting ? (
-          <RainbowKitCustomConnectButton />
-        ) : (
-          <button className="btn btn-secondary" onClick={handleMintItem}>
-            Mint NFT
-          </button>
-        )}
+
+      {/* Flow CTAs - pinned to bottom of page area */}
+      <div className="flex justify-between items-center mt-10 mb-32">
+        <Link href="/gallery" className="btn btn-ghost">
+          ← Back: Gallery
+        </Link>
+        <Link href="/" className="btn btn-outline">
+          Home
+        </Link>
       </div>
-      <MyHoldings />
-    </>
+    </div>
   );
 };
 
