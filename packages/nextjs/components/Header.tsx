@@ -27,6 +27,11 @@ export const menuLinks: HeaderMenuLink[] = [
     icon: <PhotoIcon className="h-4 w-4" />,
   },
   {
+    label: "Gallery",
+    href: "/gallery",
+    icon: <PhotoIcon className="h-4 w-4" />,
+  },
+  {
     label: "Transfers",
     href: "/transfers",
     icon: <ArrowPathIcon className="h-4 w-4" />,
