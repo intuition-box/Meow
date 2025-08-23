@@ -13,6 +13,12 @@ function clsx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
+function shortenAddress(addr?: string, left = 6, right = 4) {
+  if (!addr) return "";
+  if (addr.length <= left + right + 2) return addr;
+  return `${addr.slice(0, left)}…${addr.slice(-right)}`;
+}
+
 const aspectClass = (aspect?: NFTCardProps["mediaAspect"]) => {
   switch (aspect) {
     case "3:4":
@@ -91,6 +97,7 @@ export function NFTCard(props: NFTCardProps) {
       } else {
         console.error("NFTCard: watchdog exhausted gateways, using placeholder", { id });
         setImageSrc(withImageFallback(""));
+        setIsLoading(false);
       }
     }, 4000);
     return () => {
@@ -169,10 +176,18 @@ export function NFTCard(props: NFTCardProps) {
       </figure>
 
       {/* Body */}
-      <div className={clsx("space-y-2", sizes.pad)}>
+      <div
+        className={clsx(
+          "space-y-3 border-t",
+          /* subtle surface that adapts to theme */
+          "bg-base-100/60 dark:bg-[#818cf8]/10 border-[#818cf8]/30",
+          "rounded-b-xl",
+          sizes.pad,
+        )}
+      >
         <div className="flex items-start justify-between gap-2">
-          <h3 className={clsx("font-semibold text-neutral-100", sizes.title)} title={name}>
-            {name}
+          <h3 className={clsx("font-semibold tracking-[-0.01em] text-neutral-100", sizes.title)} title={name}>
+            <span className="line-clamp-2 leading-snug">{name}</span>
           </h3>
           {href && (
             <Tooltip.Provider delayDuration={150}>
@@ -203,24 +218,48 @@ export function NFTCard(props: NFTCardProps) {
         </div>
 
         {description && (
-          <p className={clsx("line-clamp-2 text-neutral-400", sizes.text)} title={description}>
+          <p className={clsx("line-clamp-3 text-neutral-300 leading-relaxed", sizes.text)} title={description}>
             {description}
           </p>
         )}
 
+        <div className="h-px w-full bg-gradient-to-r from-white/5 via-white/10 to-white/5" />
+
         <div className="flex items-center gap-2 text-neutral-400">
-          {owner && <span className="truncate text-xs">Owner: {owner}</span>}
+          {owner && (
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-[10px] uppercase tracking-wide text-neutral-500/80">Owner</span>
+              <Tooltip.Provider delayDuration={150}>
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <span className="truncate text-xs font-medium text-neutral-300 tabular-nums tracking-tight">
+                      {shortenAddress(owner)}
+                    </span>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content
+                      sideOffset={6}
+                      className="rounded-md border border-white/10 bg-neutral-900 px-2 py-1 text-xs text-neutral-200 shadow-xl"
+                    >
+                      {owner}
+                      <Tooltip.Arrow className="fill-neutral-900" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
+            </div>
+          )}
           {priceEth != null && (
-            <span className="ml-auto text-xs font-medium text-neutral-200">{String(priceEth)} ETH</span>
+            <span className="ml-auto text-xs font-semibold text-neutral-200">{String(priceEth)} ETH</span>
           )}
         </div>
 
         {(ctaPrimary || ctaSecondary || onClick) && (
-          <div className="pt-2 flex items-center gap-2">
+          <div className="pt-1.5 flex items-center gap-2">
             {ctaPrimary && (
               <button
                 className={clsx(
-                  "rounded-md border border-white/10 bg-neutral-800 text-neutral-100 hover:bg-neutral-700",
+                  "rounded-md border border-transparent bg-[var(--color-primary)] text-[var(--color-primary-content)] hover:opacity-90",
                   "transition-colors",
                   sizes.btn,
                 )}
@@ -233,7 +272,7 @@ export function NFTCard(props: NFTCardProps) {
             {ctaSecondary && (
               <button
                 className={clsx(
-                  "rounded-md border border-white/10 bg-neutral-900 text-neutral-200 hover:bg-neutral-800",
+                  "rounded-md border border-white/10 bg-neutral-800 text-neutral-100 hover:bg-neutral-700",
                   "transition-colors",
                   sizes.btn,
                 )}
