@@ -241,82 +241,84 @@ const GalleryPage: NextPage = () => {
   }, [yourCollectibleContract]);
 
   return (
-    <div className="container mx-auto px-4 pt-10 pb-24 min-h-screen flex flex-col">
-      <h1 className="text-center mb-8">
-        <span className="block text-4xl font-bold">Gallery</span>
-        <span className="block text-base opacity-70">All NFTs minted by the contract</span>
-      </h1>
-      {/* Debug header */}
-      <div className="mx-auto max-w-4xl text-xs sm:text-sm opacity-70 break-all border border-base-300 rounded-lg p-2 mb-4">
-        <div>
-          <span className="font-semibold">Contract</span>: {activeAddress ?? "(not connected)"}
+    <section className="flex items-center justify-center grow pt-14 pb-24 px-6">
+      <div className="w-full max-w-6xl flex flex-col">
+        <h1 className="text-center mb-8">
+          <span className="block text-4xl font-bold">Gallery</span>
+          <span className="block text-base opacity-70">All NFTs minted by the contract</span>
+        </h1>
+        {/* Debug header */}
+        <div className="mx-auto max-w-4xl text-xs sm:text-sm opacity-70 break-all border border-base-300 rounded-lg p-2 mb-4">
+          <div>
+            <span className="font-semibold">Contract</span>: {activeAddress ?? "(not connected)"}
+          </div>
+          <div>
+            <span className="font-semibold">Discovered</span>: {items.length} item(s){usedCache ? " (cached)" : ""}
+          </div>
         </div>
-        <div>
-          <span className="font-semibold">Discovered</span>: {items.length} item(s){usedCache ? " (cached)" : ""}
-        </div>
-      </div>
-      <div className="flex-1">
-        {!yourCollectibleContract ? (
-          <div className="flex justify-center items-center mt-10">
-            <div className="text-2xl">Connecting to contract… Ensure you are on Intuition (13579).</div>
-          </div>
-        ) : loading ? (
-          <div className="flex justify-center items-center mt-10">
-            <span className="loading loading-spinner loading-lg"></span>
-          </div>
-        ) : error ? (
-          <div className="flex justify-center items-center mt-10">
-            <div className="text-2xl text-error">{error}</div>
-          </div>
-        ) : items.length === 0 ? (
-          <div className="flex justify-center items-center mt-10">
-            <div className="text-2xl text-primary-content">No NFTs found</div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 my-6 items-stretch mx-auto">
-            {items.map(nft => (
-              <NFTCard
-                key={nft.id}
-                id={nft.id}
-                name={nft.name ?? `Token #${nft.id}`}
-                imageUrl={nft.image ?? ""}
-                description={nft.description}
-                owner={nft.owner}
-                mediaAspect="3:4"
-              />
-            ))}
-          </div>
-        )}
+        <div className="flex-1">
+          {!yourCollectibleContract ? (
+            <div className="flex justify-center items-center mt-10">
+              <div className="text-2xl">Connecting to contract… Ensure you are on Intuition (13579).</div>
+            </div>
+          ) : loading ? (
+            <div className="flex justify-center items-center mt-10">
+              <span className="loading loading-spinner loading-lg"></span>
+            </div>
+          ) : error ? (
+            <div className="flex justify-center items-center mt-10">
+              <div className="text-2xl text-error">{error}</div>
+            </div>
+          ) : items.length === 0 ? (
+            <div className="flex justify-center items-center mt-10">
+              <div className="text-2xl text-primary-content">No NFTs found</div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 my-6 items-stretch mx-auto">
+              {items.map(nft => (
+                <NFTCard
+                  key={nft.id}
+                  id={nft.id}
+                  name={nft.name ?? `Token #${nft.id}`}
+                  imageUrl={nft.image ?? ""}
+                  description={nft.description}
+                  owner={nft.owner}
+                  mediaAspect="3:4"
+                />
+              ))}
+            </div>
+          )}
 
-        {/* Refresh and cache status */}
-        <div className="flex justify-center mt-6">
-          <button
-            className="btn btn-sm"
-            onClick={() => {
-              ignoreCacheRef.current = true; // next load bypasses cache
-              // reset loaded address so we can force reload
-              loadedForAddressRef.current = null;
-              // trigger effect by toggling loading via a microtask
-              setLoading(true);
-              setTimeout(() => setLoading(false), 0);
-            }}
-          >
-            Refresh gallery
-          </button>
-          {usedCache && <span className="ml-3 text-sm opacity-60">Loaded from cache</span>}
+          {/* Refresh and cache status */}
+          <div className="flex justify-center mt-6">
+            <button
+              className="btn btn-sm"
+              onClick={() => {
+                ignoreCacheRef.current = true; // next load bypasses cache
+                // reset loaded address so we can force reload
+                loadedForAddressRef.current = null;
+                // trigger effect by toggling loading via a microtask
+                setLoading(true);
+                setTimeout(() => setLoading(false), 0);
+              }}
+            >
+              Refresh gallery
+            </button>
+            {usedCache && <span className="ml-3 text-sm opacity-60">Loaded from cache</span>}
+          </div>
+        </div>
+
+        {/* Flow CTAs - pinned to bottom of page area */}
+        <div className="flex justify-between items-center mt-10 mb-2">
+          <Link href="/" className="btn btn-ghost">
+            ← Back: Home
+          </Link>
+          <Link href="/myNFTs" className="btn btn-ghost">
+            Next: My NFTs →
+          </Link>
         </div>
       </div>
-
-      {/* Flow CTAs - pinned to bottom of page area */}
-      <div className="flex justify-between items-center mt-10 mb-32">
-        <Link href="/" className="btn btn-ghost">
-          ← Back: Home
-        </Link>
-        <Link href="/myNFTs" className="btn btn-secondary">
-          Next: My NFTs →
-        </Link>
-      </div>
-    </div>
+    </section>
   );
 };
 

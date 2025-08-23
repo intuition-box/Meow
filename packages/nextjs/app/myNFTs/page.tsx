@@ -46,37 +46,39 @@ const MyNFTs: NextPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 pt-10 pb-24 min-h-screen flex flex-col">
-      <div className="flex-1">
-        <div className="flex items-center flex-col">
-          <div className="px-5">
-            <h1 className="text-center mb-8">
-              <span className="block text-4xl font-bold">My NFTs</span>
-            </h1>
+    <section className="flex items-center justify-center grow pt-14 pb-24 px-6">
+      <div className="w-full max-w-6xl flex flex-col">
+        <div className="flex-1">
+          <div className="flex items-center flex-col">
+            <div className="px-5">
+              <h1 className="text-center mb-8">
+                <span className="block text-4xl font-bold">My NFTs</span>
+              </h1>
+            </div>
           </div>
+          <div className="flex justify-center">
+            {!isConnected || isConnecting ? (
+              <RainbowKitCustomConnectButton />
+            ) : (
+              <button className="btn btn-secondary" onClick={handleMintItem}>
+                Mint NFT
+              </button>
+            )}
+          </div>
+          <MyHoldings />
         </div>
-        <div className="flex justify-center">
-          {!isConnected || isConnecting ? (
-            <RainbowKitCustomConnectButton />
-          ) : (
-            <button className="btn btn-secondary" onClick={handleMintItem}>
-              Mint NFT
-            </button>
-          )}
-        </div>
-        <MyHoldings />
-      </div>
 
-      {/* Flow CTAs - pinned to bottom of page area */}
-      <div className="flex justify-between items-center mt-10 mb-32">
-        <Link href="/gallery" className="btn btn-ghost">
-          ← Back: Gallery
-        </Link>
-        <Link href="/" className="btn btn-outline">
-          Home
-        </Link>
+        {/* Flow CTAs - pinned to bottom of page area */}
+        <div className="flex justify-between items-center mt-10 mb-2">
+          <Link href="/gallery" className="btn btn-ghost">
+            ← Back: Gallery
+          </Link>
+          <Link href="/" className="btn btn-outline">
+            Home
+          </Link>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
