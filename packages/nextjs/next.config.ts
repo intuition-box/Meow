@@ -20,6 +20,15 @@ const nextConfig: NextConfig = {
     return config;
   },
   serverExternalPackages: ["ipfs-utils"],
+  async redirects() {
+    return [
+      { source: "/transfers", destination: "/", permanent: false },
+      { source: "/ipfsUpload", destination: "/", permanent: false },
+      { source: "/ipfsDownload", destination: "/", permanent: false },
+      { source: "/debug", destination: "/", permanent: false },
+      { source: "/blockexplorer", destination: "/", permanent: false },
+    ];
+  },
 };
 
 const isIpfs = process.env.NEXT_PUBLIC_IPFS_BUILD === "true";
