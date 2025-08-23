@@ -127,19 +127,22 @@
 @plugin "daisyui/theme" {
   name: "light";
 
-  --color-primary: #c8f5ff;
-  --color-primary-content: #026262;
-  --color-secondary: #89d7e9;
-  --color-secondary-content: #088484;
-  --color-accent: #026262;
-  --color-accent-content: #e9fbff;
-  --color-neutral: #088484;
-  --color-neutral-content: #f0fcff;
-  --color-base-100: #f0fcff;
-  --color-base-200: #e1faff;
-  --color-base-300: #c8f5ff;
-  --color-base-content: #088484;
-  --color-info: #026262;
+  /* Primary: Deep Indigo */
+  --color-primary: #4f46e5;
+  --color-primary-content: #ffffff;
+  /* Indigo-aligned secondary/accent (light) */
+  --color-secondary: #e0e7ff; /* Indigo 100 */
+  --color-secondary-content: #1e1b4b; /* Indigo 950 */
+  --color-accent: #a5b4fc; /* Indigo 300 */
+  --color-accent-content: #1e1b4b;
+  --color-neutral: #475569; /* slate-600 */
+  --color-neutral-content: #0f172a; /* slate-900 */
+  /* Near-white with subtle Indigo tint */
+  --color-base-100: #fafbff; /* almost white */
+  --color-base-200: #eef2ff; /* Indigo 50 */
+  --color-base-300: #e0e7ff; /* Indigo 100 */
+  --color-base-content: #0f172a; /* dark text for readability */
+  --color-info: #4f46e5; /* align info to primary hue */
   --color-success: #34eeb6;
   --color-warning: #ffcf72;
   --color-error: #ff8863;
@@ -156,19 +159,22 @@
 @plugin "daisyui/theme" {
   name: "dark";
 
-  --color-primary: #026262;
-  --color-primary-content: #c8f5ff;
-  --color-secondary: #107575;
-  --color-secondary-content: #e9fbff;
-  --color-accent: #c8f5ff;
-  --color-accent-content: #088484;
-  --color-neutral: #e9fbff;
-  --color-neutral-content: #11acac;
-  --color-base-100: #11acac;
-  --color-base-200: #088484;
-  --color-base-300: #026262;
-  --color-base-content: #e9fbff;
-  --color-info: #c8f5ff;
+  /* Primary: Indigo (dark mode) */
+  --color-primary: #6366F1;
+  --color-primary-content: #ffffff; /* brighter for contrast */
+  /* Indigo-aligned secondary/accent (dark) */
+  --color-secondary: #3730a3; /* Indigo 700 */
+  --color-secondary-content: #eef2ff; /* Indigo 50 */
+  --color-accent: #818cf8; /* Indigo 400 */
+  --color-accent-content: #0b1020;
+  --color-neutral: #94a3b8; /* slate-400 for controls/icons */
+  --color-neutral-content: #0b0f1a;
+  /* Indigo background scale for dark mode (higher contrast) */
+  --color-base-100: #0b0f1a; /* near-black with indigo tint */
+  --color-base-200: #0f172a; /* deep slate/indigo */
+  --color-base-300: #1e1b4b; /* indigo 950 as elevated */
+  --color-base-content: #ffffff; /* pure white for maximum contrast */
+  --color-info: #a5b4fc; /* Indigo 300 */
   --color-success: #34eeb6;
   --color-warning: #ffcf72;
   --color-error: #ff8863;
