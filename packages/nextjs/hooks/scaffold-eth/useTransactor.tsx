@@ -79,6 +79,10 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
       });
       notification.remove(notificationId);
 
+      // Guard: receipt can be undefined if waitForTransactionReceipt throws or returns unexpectedly
+      if (!transactionReceipt) {
+        throw new Error("No transaction receipt returned");
+      }
       if (transactionReceipt.status === "reverted") throw new Error("Transaction reverted");
 
       notification.success(
@@ -88,7 +92,7 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
         },
       );
 
-      if (options?.onBlockConfirmation) options.onBlockConfirmation(transactionReceipt);
+      if (options?.onBlockConfirmation && transactionReceipt) options.onBlockConfirmation(transactionReceipt);
     } catch (error: any) {
       if (notificationId) {
         notification.remove(notificationId);
