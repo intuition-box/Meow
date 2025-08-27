@@ -1,4 +1,4 @@
-# YourCollectible NFT dApp
+# Kitten NFT Gallery
 
 [![Lint](https://github.com/ChainsQueenEth/NFTs/actions/workflows/lint.yaml/badge.svg)](https://github.com/ChainsQueenEth/NFTs/actions/workflows/lint.yaml)
 [![Live App](https://img.shields.io/website?url=https%3A%2F%2Fnfts-sepia.vercel.app&label=vercel&logo=vercel)](https://nfts-sepia.vercel.app/)
