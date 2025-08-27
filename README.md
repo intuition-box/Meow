@@ -5,7 +5,13 @@
 ![Node >=20.18.3](https://img.shields.io/badge/node-%3E%3D20.18.3-339933?logo=node.js&logoColor=white)
 ![Yarn 3.x](https://img.shields.io/badge/yarn-3.x-2C8EBB?logo=yarn&logoColor=white)
 
-A full-stack ERC-721 NFT project built with Hardhat (contracts) and Next.js (dApp UI). Includes local chain, deployment, verification, and optional static export to IPFS.
+Modern, full‑stack ERC‑721 NFT dApp powered by Hardhat (contracts) and Next.js (UI).
+
+What you get out of the box:
+- __Local chain__: Hardhat dev node for rapid iteration (`yarn chain`).
+- __Deployment__: One‑command deploys via `hardhat-deploy` (`yarn deploy`).
+- __Verification__: Etherscan verification (`yarn verify`).
+- __IPFS export__: Static export + publish with `bgipfs` (`yarn ipfs`).
 
 ## Contents
 
