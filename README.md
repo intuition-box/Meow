@@ -2,6 +2,12 @@
 
 A full-stack ERC-721 NFT project built with Hardhat (contracts) and Next.js (dApp UI). Includes local chain, deployment, verification, and optional static export to IPFS.
 
+## Live App
+
+- URL: https://nfts-sepia.vercel.app/
+
+![Home page](packages/nextjs/public/img/home_page.png)
+
 ## Tech Stack
 
 - Contracts: Solidity, Hardhat, hardhat-deploy, OpenZeppelin (ERC721, Enumerable, URI Storage)
