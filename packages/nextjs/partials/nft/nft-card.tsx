@@ -49,6 +49,7 @@ export function NFTCard(props: NFTCardProps) {
     description,
     owner,
     priceEth,
+    priceUnit,
     badgeText,
     mediaAspect = "1:1",
     href,
@@ -250,17 +251,19 @@ export function NFTCard(props: NFTCardProps) {
             </div>
           )}
           {priceEth != null && (
-            <span className="ml-auto text-xs font-semibold text-neutral-200">{String(priceEth)} ETH</span>
+            <span className="ml-auto text-xs font-semibold text-neutral-200">
+              {String(priceEth)} {priceUnit || "ETH"}
+            </span>
           )}
         </div>
 
         {(ctaPrimary || ctaSecondary || onClick) && (
-          <div className="pt-1.5 flex items-center gap-2">
+          <div className="pt-1.5 flex items-center justify-center gap-2">
             {ctaPrimary && (
               <button
                 className={clsx(
                   "rounded-md border border-transparent bg-[var(--color-primary)] text-[var(--color-primary-content)] hover:opacity-90",
-                  "transition-colors",
+                  "transition-all duration-150 transform active:scale-95 will-change-transform",
                   sizes.btn,
                 )}
                 onClick={ctaPrimary.onClick}
@@ -273,7 +276,7 @@ export function NFTCard(props: NFTCardProps) {
               <button
                 className={clsx(
                   "rounded-md border border-white/10 bg-neutral-800 text-neutral-100 hover:bg-neutral-700",
-                  "transition-colors",
+                  "transition-all duration-150 transform active:scale-95 will-change-transform",
                   sizes.btn,
                 )}
                 onClick={ctaSecondary.onClick}
@@ -286,7 +289,7 @@ export function NFTCard(props: NFTCardProps) {
               <button
                 className={clsx(
                   "rounded-md border border-white/10 bg-neutral-800 text-neutral-100 hover:bg-neutral-700",
-                  "transition-colors",
+                  "transition-colors transition-transform transform active:scale-95 will-change-transform",
                   sizes.btn,
                 )}
                 onClick={onClick}

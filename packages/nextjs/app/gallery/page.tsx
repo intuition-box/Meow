@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
-import { useScaffoldContract } from "~~/hooks/scaffold-eth";
+import { formatEther } from "viem";
+import { useScaffoldContract, useScaffoldReadContract } from "~~/hooks/scaffold-eth";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
 import { NFTCard } from "~~/partials/nft/nft-card";
 import { notification } from "~~/utils/scaffold-eth";
 import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
@@ -64,11 +66,25 @@ const GalleryPage: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [usedCache, setUsedCache] = useState(false);
+  const [minting, setMinting] = useState(false);
 
   const { data: yourCollectibleContract } = useScaffoldContract({ contractName: "YourCollectible" });
   const loadedForAddressRef = useRef<string | null>(null);
   const loadingRef = useRef(false);
   const ignoreCacheRef = useRef(false);
+
+  // Read sale status and price
+  const { data: saleActive } = useScaffoldReadContract({
+    contractName: "YourCollectible",
+    functionName: "saleActive" as any,
+  } as any);
+  const { data: mintPrice } = useScaffoldReadContract({
+    contractName: "YourCollectible",
+    functionName: "mintPrice" as any,
+  } as any);
+
+  // Write: mintKitten
+  const { writeContractAsync } = useScaffoldWriteContract({ contractName: "YourCollectible" });
 
   const readCache = (addr: string) => {
     try {
@@ -244,6 +260,8 @@ const GalleryPage: NextPage = () => {
         <h1 className="text-center mb-8">
           <span className="block text-4xl font-bold">Gallery</span>
         </h1>
+        {/* Mint CTA */}
+        {/* Global mint button and sale status removed per request; mint via per-card buttons */}
         <div className="flex-1">
           {!yourCollectibleContract ? (
             <div className="flex justify-center items-center mt-10">
@@ -271,6 +289,40 @@ const GalleryPage: NextPage = () => {
                   imageUrl={nft.image ?? ""}
                   description={nft.description}
                   owner={nft.owner}
+                  priceEth={mintPrice != null ? formatEther(BigInt(mintPrice as any)) : undefined}
+                  priceUnit="TTRUST"
+                  ctaPrimary={{
+                    label: mintPrice != null ? `Mint for ${formatEther(BigInt(mintPrice as any))} TTRUST` : "Mint",
+                    onClick: async () => {
+                      try {
+                        if (mintPrice == null) return;
+                        setMinting(true);
+                        await writeContractAsync(
+                          {
+                            functionName: "mintKitten" as any,
+                            args: [] as any,
+                            value: mintPrice as unknown as bigint,
+                          } as any,
+                          {
+                            blockConfirmations: 1,
+                            onBlockConfirmation: () => {
+                              // Force refresh after mint
+                              ignoreCacheRef.current = true;
+                              loadedForAddressRef.current = null;
+                              setLoading(true);
+                              setTimeout(() => setLoading(false), 0);
+                            },
+                          },
+                        );
+                        notification.success("Minted a new kitten!");
+                      } catch (e: any) {
+                        notification.error(e?.shortMessage || e?.message || "Mint failed");
+                      } finally {
+                        setMinting(false);
+                      }
+                    },
+                    disabled: !saleActive || minting || mintPrice == null,
+                  }}
                   mediaAspect="3:4"
                 />
               ))}
