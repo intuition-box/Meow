@@ -64,7 +64,6 @@ const GalleryPage: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [usedCache, setUsedCache] = useState(false);
-  const [activeAddress, setActiveAddress] = useState<string | null>(null);
 
   const { data: yourCollectibleContract } = useScaffoldContract({ contractName: "YourCollectible" });
   const loadedForAddressRef = useRef<string | null>(null);
@@ -97,7 +96,6 @@ const GalleryPage: NextPage = () => {
     const loadAll = async () => {
       if (!yourCollectibleContract) return;
       const contractAddress = (yourCollectibleContract as any).address as string | undefined;
-      setActiveAddress(contractAddress ?? null);
       if (contractAddress && loadedForAddressRef.current === contractAddress) return; // already loaded for this address
       if (loadingRef.current) return; // avoid concurrent loads
       loadingRef.current = true;
@@ -245,17 +243,7 @@ const GalleryPage: NextPage = () => {
       <div className="w-full max-w-6xl flex flex-col">
         <h1 className="text-center mb-8">
           <span className="block text-4xl font-bold">Gallery</span>
-          <span className="block text-base opacity-70">All NFTs minted by the contract</span>
         </h1>
-        {/* Debug header */}
-        <div className="mx-auto max-w-4xl text-xs sm:text-sm opacity-70 break-all border border-base-300 rounded-lg p-2 mb-4">
-          <div>
-            <span className="font-semibold">Contract</span>: {activeAddress ?? "(not connected)"}
-          </div>
-          <div>
-            <span className="font-semibold">Discovered</span>: {items.length} item(s){usedCache ? " (cached)" : ""}
-          </div>
-        </div>
         <div className="flex-1">
           {!yourCollectibleContract ? (
             <div className="flex justify-center items-center mt-10">
