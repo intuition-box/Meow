@@ -1,6 +1,23 @@
 # YourCollectible NFT dApp
 
+[![Lint](https://github.com/ChainsQueenEth/NFTs/actions/workflows/lint.yaml/badge.svg)](https://github.com/ChainsQueenEth/NFTs/actions/workflows/lint.yaml)
+[![Live App](https://img.shields.io/website?url=https%3A%2F%2Fnfts-sepia.vercel.app&label=vercel&logo=vercel)](https://nfts-sepia.vercel.app/)
+![Node >=20.18.3](https://img.shields.io/badge/node-%3E%3D20.18.3-339933?logo=node.js&logoColor=white)
+![Yarn 3.x](https://img.shields.io/badge/yarn-3.x-2C8EBB?logo=yarn&logoColor=white)
+
 A full-stack ERC-721 NFT project built with Hardhat (contracts) and Next.js (dApp UI). Includes local chain, deployment, verification, and optional static export to IPFS.
+
+## Contents
+
+- [Live App](#live-app)
+- [Tech Stack](#tech-stack)
+- [Monorepo Structure](#monorepo-structure)
+- [Quick Start](#quick-start)
+- [Common Commands](#common-commands)
+- [Contract Overview](#contract-overview)
+- [Deployment Notes](#deployment-notes)
+- [IPFS Publishing](#ipfs-publishing)
+- [Troubleshooting](#troubleshooting)
 
 ## Live App
 
@@ -114,38 +131,43 @@ Legend:
 - __packages/hardhat/__ contracts, deployments, ABIs (`deployments/`).
 - __packages/nextjs/__ Next.js dApp UI consuming ABIs/addresses from `packages/nextjs/contracts/`.
 
-## Prerequisites
+## Quick Start
 
-- Node >= 20.18.3
-- Yarn 3.x (repo uses Yarn; see `"packageManager": "yarn@3.2.3"`)
+1) Requirements
+   - Node >= 20.18.3
+   - Yarn 3.x (see `"packageManager": "yarn@3.2.3"`)
 
-## Setup
+2) Install
 
-1. Install dependencies:
-   - `yarn install`
+```bash
+yarn install
+```
 
-2. Configure envs:
-   - Copy [packages/hardhat/.env.example](packages/hardhat/.env.example) to [packages/hardhat/.env](packages/hardhat/.env)
-     - Set: `ALCHEMY_API_KEY`, `ETHERSCAN_V2_API_KEY`
-     - Generate or import deployer key:
-       - `yarn account:generate` or `yarn account:import`
-   - Copy [packages/nextjs/.env.example](packages/nextjs/.env.example) to `packages/nextjs/.env`
-     - Fill any required NEXT_PUBLIC_* values per your setup
+3) Configure envs
 
-## Local Development
+- Hardhat: copy `packages/hardhat/.env.example` → `packages/hardhat/.env`
+  - Set: `ALCHEMY_API_KEY`, `ETHERSCAN_V2_API_KEY`
+  - Deployer key: `yarn account:generate` or `yarn account:import`
+- Next.js: copy `packages/nextjs/.env.example` → `packages/nextjs/.env`
+  - Fill any required `NEXT_PUBLIC_*` vars
 
-- Start local Hardhat chain:
-  - `yarn chain`
-- In another terminal, compile and deploy:
-  - `yarn compile`
-  - `yarn deploy`
-- Start the Next.js app:
-  - `yarn start`
-- Open: http://localhost:3000
+4) Run locally
+
+```bash
+# Terminal 1
+yarn chain
+
+# Terminal 2
+yarn compile && yarn deploy
+
+# Terminal 3
+yarn start
+# Open http://localhost:3000
+```
 
 ## Common Commands
 
-- Contracts
+- __Contracts__
   - `yarn compile` – Compile contracts
   - `yarn test` – Run tests on Hardhat network
   - `yarn deploy` – Deploy using `hardhat-deploy` (uses deployer key)
@@ -157,12 +179,12 @@ Legend:
     - `yarn account:import` – Import private key
     - `yarn account:reveal-pk` – Reveal stored PK
 
-- Frontend
+- __Frontend__
   - `yarn start` – Next.js dev
   - `yarn next:build` / `yarn next:serve` – Build/serve
   - `yarn ipfs` – Static export + upload to IPFS via bgipfs
 
-- Quality
+- __Quality__
   - `yarn lint` – Lint (frontend + contracts)
   - `yarn format` – Prettier format
 
