@@ -69,16 +69,15 @@ A full-stack ERC-721 NFT project built with Hardhat (contracts) and Next.js (dAp
 ## Monorepo Structure
 
 ```mermaid
-flowchart LR
-  subgraph PACKAGES [packages/]
-    H[hardhat/]
-    N[nextjs/]
-  end
+flowchart TB
+  %% Top-down orientation so the diagram grows in height as needed
 
   subgraph HARDHAT [packages/hardhat/]
     C[contracts/]
     D[deploy/]
-    E[deployments/<br/>intuition/, localhost/]
+    E[deployments/]
+    Ei[intuition/]
+    El[localhost/]
     S[scripts/]
     T[test/]
   end
@@ -87,21 +86,28 @@ flowchart LR
     A[app/]
     CMP[components/]
     SRV[services/]
-    CNT[contracts/<br/>deployedContracts.ts, externalContracts.ts]
+    CNT[contracts/]
+    DC[deployedContracts.ts]
+    EC[externalContracts.ts]
     HK[hooks/]
     U[utils/]
     PUB[public/]
   end
 
-  H --> HARDHAT
-  N --> NEXTJS
+  %% Structure inside hardhat
+  C --> D
+  D --> E
+  E --> Ei
+  E --> El
 
-  C --> H
-  D --> H
-  H -. build & deploy .-> E
-  E -- ABIs & addresses --> CNT
-  S -. sync helpers .-> CNT
-  CNT --> N
+  %% How nextjs consumes artifacts
+  E -- ABIs & addresses --> DC
+  CNT --> DC
+  CNT --> EC
+
+  %% App uses contracts config
+  DC --> A
+  EC --> A
 ```
 
 Legend:
