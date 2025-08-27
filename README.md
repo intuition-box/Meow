@@ -70,40 +70,43 @@ A full-stack ERC-721 NFT project built with Hardhat (contracts) and Next.js (dAp
 
 ```mermaid
 flowchart LR
-  subgraph APPS [apps/]
-    W[webhook] --> RT[(router.ts)]
-    A[api]
-    M[mcp-server]
-    S[scanner]
-    V[web]
-  end
-
   subgraph PACKAGES [packages/]
-    subgraph HANDLERS [handlers/<provider>/]
-      H1[validate.ts]
-      H2[parse.ts]
-      H3[index.ts]
-    end
-    SHARED[shared/]
-    L1[client-neo4j/]
-    L2[supabase/]
-    L3[code-parser/]
-    HARDHAT[hardhat/]
-    NEXTJS[nextjs/]
+    H[hardhat/]
+    N[nextjs/]
   end
 
-  RT --> HANDLERS
-  HANDLERS --> SHARED
-  V --> SHARED
-  HARDHAT -. ABIs/addresses .-> NEXTJS
+  subgraph HARDHAT [packages/hardhat/]
+    C[contracts/]
+    D[deploy/]
+    E[deployments/\nintuition/, localhost/]
+    S[scripts/]
+    T[test/]
+  end
+
+  subgraph NEXTJS [packages/nextjs/]
+    A[app/]
+    CMP[components/]
+    SRV[services/]
+    CNT[contracts/\n(deployedContracts.ts, externalContracts.ts)]
+    HK[hooks/]
+    U[utils/]
+    PUB[public/]
+  end
+
+  H --> HARDHAT
+  N --> NEXTJS
+
+  C --> H
+  D --> H
+  H -. build & deploy .-> E
+  E -- ABIs & addresses --> CNT
+  S -. sync helpers .-> CNT
+  CNT --> N
 ```
 
 Legend:
-- __apps/__ orchestrates entrypoints (no provider logic). `apps/webhook` dispatches to `packages/handlers/{provider}/router.ts`.
-- __packages/handlers/{provider}/__ contains provider-specific logic (`validate.ts`, `parse.ts`, `index.ts`).
-- __packages/shared/__ holds shared types and normalized events.
-- __packages/hardhat/__ contracts, deployments, ABIs. Exposes ABIs/addresses consumed by `packages/nextjs/`.
-- __packages/nextjs/__ Next.js dApp UI using ABIs from `hardhat`.
+- __packages/hardhat/__ contracts, deployments, ABIs (`deployments/`).
+- __packages/nextjs/__ Next.js dApp UI consuming ABIs/addresses from `packages/nextjs/contracts/`.
 
 ## Prerequisites
 
