@@ -3,7 +3,6 @@
 Browse a playful kitten collection and view the NFTs you own.
 
 <p align="center">
-  <a href="https://github.com/ChainsQueenEth/NFTs/actions/workflows/lint.yaml"><img src="https://github.com/ChainsQueenEth/NFTs/actions/workflows/lint.yaml/badge.svg" alt="Lint" /></a>
   <a href="https://nfts-sepia.vercel.app/"><img src="https://img.shields.io/website?url=https%3A%2F%2Fnfts-sepia.vercel.app&label=Live%20App&logo=vercel" alt="Live App" /></a>
   <img src="https://img.shields.io/badge/node-%3E%3D20.18.3-339933?logo=node.js&logoColor=white" alt="Node >=20.18.3" />
   <img src="https://img.shields.io/badge/yarn-3.x-2C8EBB?logo=yarn&logoColor=white" alt="Yarn 3.x" />
