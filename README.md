@@ -19,7 +19,6 @@ What you get out of the box:
 
 ## Contents
 
-- [Live App](#live-app)
 - [Tech Stack](#tech-stack)
 - [Monorepo Structure](#monorepo-structure)
 - [Quick Start](#quick-start)
@@ -29,9 +28,6 @@ What you get out of the box:
 - [IPFS Publishing](#ipfs-publishing)
 - [Troubleshooting](#troubleshooting)
 
-## Live App
-
-[![Live App](https://img.shields.io/website?url=https%3A%2F%2Fnfts-sepia.vercel.app&label=Live%20App&logo=vercel)](https://nfts-sepia.vercel.app/)
 
 <h3>Home & Gallery</h3>
 <p align="center">
