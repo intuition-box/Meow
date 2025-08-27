@@ -6,7 +6,55 @@ A full-stack ERC-721 NFT project built with Hardhat (contracts) and Next.js (dAp
 
 - URL: https://nfts-sepia.vercel.app/
 
-![Home page](packages/nextjs/public/img/home_page.png)
+<h3>Home & Gallery</h3>
+<p align="center">
+  <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
+    <img src="packages/nextjs/public/img/home_page.png" alt="Home page" width="100%" />
+    <br />
+    <sub>Home page</sub>
+  </span>
+  <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
+    <img src="packages/nextjs/public/img/gallery_page.png" alt="Gallery page" width="100%" />
+    <br />
+    <sub>Gallery page</sub>
+  </span>
+</p>
+
+### Sample NFTs
+<p align="center">
+  <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
+    <img src="packages/nextjs/public/img/1_kitten.png" alt="Kitten 1" width="100%" />
+    <br />
+    <sub>Kitten 1</sub>
+  </span>
+  <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
+    <img src="packages/nextjs/public/img/2_kitten.png" alt="Kitten 2" width="100%" />
+    <br />
+    <sub>Kitten 2</sub>
+  </span>
+  <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
+    <img src="packages/nextjs/public/img/3_kitten.png" alt="Kitten 3" width="100%" />
+    <br />
+    <sub>Kitten 3</sub>
+  </span>
+</p>
+<p align="center">
+  <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
+    <img src="packages/nextjs/public/img/4_kitten.png" alt="Kitten 4" width="100%" />
+    <br />
+    <sub>Kitten 4</sub>
+  </span>
+  <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
+    <img src="packages/nextjs/public/img/5_kitten.png" alt="Kitten 5" width="100%" />
+    <br />
+    <sub>Kitten 5</sub>
+  </span>
+  <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
+    <img src="packages/nextjs/public/img/6_kitten.png" alt="Kitten 6" width="100%" />
+    <br />
+    <sub>Kitten 6</sub>
+  </span>
+</p>
 
 ## Tech Stack
 
