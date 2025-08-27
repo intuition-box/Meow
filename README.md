@@ -1,7 +1,9 @@
 # Kitten NFT Gallery
 
+Browse a playful kitten collection and view the NFTs you own.
+
 [![Lint](https://github.com/ChainsQueenEth/NFTs/actions/workflows/lint.yaml/badge.svg)](https://github.com/ChainsQueenEth/NFTs/actions/workflows/lint.yaml)
-[![Live App](https://img.shields.io/website?url=https%3A%2F%2Fnfts-sepia.vercel.app&label=vercel&logo=vercel)](https://nfts-sepia.vercel.app/)
+[![Live App](https://img.shields.io/website?url=https%3A%2F%2Fnfts-sepia.vercel.app&label=Live%20App&logo=vercel)](https://nfts-sepia.vercel.app/)
 ![Node >=20.18.3](https://img.shields.io/badge/node-%3E%3D20.18.3-339933?logo=node.js&logoColor=white)
 ![Yarn 3.x](https://img.shields.io/badge/yarn-3.x-2C8EBB?logo=yarn&logoColor=white)
 
@@ -27,7 +29,7 @@ What you get out of the box:
 
 ## Live App
 
-[![Live App](https://img.shields.io/website?url=https%3A%2F%2Fnfts-sepia.vercel.app&label=live%20app&logo=vercel)](https://nfts-sepia.vercel.app/)
+[![Live App](https://img.shields.io/website?url=https%3A%2F%2Fnfts-sepia.vercel.app&label=Live%20App&logo=vercel)](https://nfts-sepia.vercel.app/)
 
 <h3>Home & Gallery</h3>
 <p align="center">
