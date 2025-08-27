@@ -78,7 +78,7 @@ flowchart LR
   subgraph HARDHAT [packages/hardhat/]
     C[contracts/]
     D[deploy/]
-    E[deployments/\nintuition/, localhost/]
+    E[deployments/<br/>intuition/, localhost/]
     S[scripts/]
     T[test/]
   end
@@ -87,7 +87,7 @@ flowchart LR
     A[app/]
     CMP[components/]
     SRV[services/]
-    CNT[contracts/\n(deployedContracts.ts, externalContracts.ts)]
+    CNT[contracts/<br/>deployedContracts.ts, externalContracts.ts]
     HK[hooks/]
     U[utils/]
     PUB[public/]
