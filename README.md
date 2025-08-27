@@ -42,34 +42,34 @@ A full-stack ERC-721 NFT project built with Hardhat (contracts) and Next.js (dAp
   <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/1_kitten.png" alt="Kitten 1" width="100%" />
     <br />
-    <sub>Kitten 1</sub>
+    <sub>Kitten</sub>
   </span>
   <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/2_kitten.png" alt="Kitten 2" width="100%" />
     <br />
-    <sub>Kitten 2</sub>
+    <sub>Kitten</sub>
   </span>
   <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/3_kitten.png" alt="Kitten 3" width="100%" />
     <br />
-    <sub>Kitten 3</sub>
+    <sub>Kitten</sub>
   </span>
 </p>
 <p align="center">
   <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/4_kitten.png" alt="Kitten 4" width="100%" />
     <br />
-    <sub>Kitten 4</sub>
+    <sub>Kitten</sub>
   </span>
   <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/5_kitten.png" alt="Kitten 5" width="100%" />
     <br />
-    <sub>Kitten 5</sub>
+    <sub>Kitten</sub>
   </span>
   <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/6_kitten.png" alt="Kitten 6" width="100%" />
     <br />
-    <sub>Kitten 6</sub>
+    <sub>Kitten</sub>
   </span>
 </p>
 
