@@ -4,7 +4,7 @@ A full-stack ERC-721 NFT project built with Hardhat (contracts) and Next.js (dAp
 
 ## Live App
 
-- URL: https://nfts-sepia.vercel.app/
+[![Live App](https://img.shields.io/website?url=https%3A%2F%2Fnfts-sepia.vercel.app&label=live%20app&logo=vercel)](https://nfts-sepia.vercel.app/)
 
 <h3>Home & Gallery</h3>
 <p align="center">
@@ -58,20 +58,52 @@ A full-stack ERC-721 NFT project built with Hardhat (contracts) and Next.js (dAp
 
 ## Tech Stack
 
-- Contracts: Solidity, Hardhat, hardhat-deploy, OpenZeppelin (ERC721, Enumerable, URI Storage)
-- Frontend: Next.js 15, React 19, Tailwind CSS 4, DaisyUI
-- Web3: wagmi, viem, RainbowKit
-- State/Data: Zustand, TanStack Query
-- Utilities: Prettier/ESLint, TypeScript, bgipfs (IPFS), Vercel (optional)
+| Category   | Tools |
+|------------|-------|
+| Contracts  | Solidity, Hardhat, hardhat-deploy, OpenZeppelin (ERC721, Enumerable, URI Storage) |
+| Frontend   | Next.js 15, React 19, Tailwind CSS 4, DaisyUI |
+| Web3       | wagmi, viem, RainbowKit |
+| State/Data | Zustand, TanStack Query |
+| Utilities  | TypeScript, ESLint, Prettier, bgipfs (IPFS), Vercel (optional) |
 
 ## Monorepo Structure
 
-- `packages/hardhat/` – Contracts, deploy scripts, tests, artifacts
-  - [contracts/YourCollectible.sol](packages/hardhat/contracts/YourCollectible.sol) – ERC-721 with `mintItem` and `mintBatch`
-  - `deploy/` & `deployments/` – hardhat-deploy config and outputs
-- `packages/nextjs/` – Next.js dApp (connect wallet, interact with contracts)
-  - `components/`, `hooks/`, `services/`, `utils/`
-  - `contracts/` – ABIs/addresses consumed by the UI
+```mermaid
+flowchart LR
+  subgraph APPS [apps/]
+    W[webhook] --> RT[(router.ts)]
+    A[api]
+    M[mcp-server]
+    S[scanner]
+    V[web]
+  end
+
+  subgraph PACKAGES [packages/]
+    subgraph HANDLERS [handlers/<provider>/]
+      H1[validate.ts]
+      H2[parse.ts]
+      H3[index.ts]
+    end
+    SHARED[shared/]
+    L1[client-neo4j/]
+    L2[supabase/]
+    L3[code-parser/]
+    HARDHAT[hardhat/]
+    NEXTJS[nextjs/]
+  end
+
+  RT --> HANDLERS
+  HANDLERS --> SHARED
+  V --> SHARED
+  HARDHAT -. ABIs/addresses .-> NEXTJS
+```
+
+Legend:
+- __apps/__ orchestrates entrypoints (no provider logic). `apps/webhook` dispatches to `packages/handlers/{provider}/router.ts`.
+- __packages/handlers/{provider}/__ contains provider-specific logic (`validate.ts`, `parse.ts`, `index.ts`).
+- __packages/shared/__ holds shared types and normalized events.
+- __packages/hardhat/__ contracts, deployments, ABIs. Exposes ABIs/addresses consumed by `packages/nextjs/`.
+- __packages/nextjs/__ Next.js dApp UI using ABIs from `hardhat`.
 
 ## Prerequisites
 
