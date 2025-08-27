@@ -21,3 +21,24 @@ node_modules
 
 # cli
 dist
+
+# env (never commit secrets)
+**/.env
+**/.env.*
+
+# Next.js build output
+packages/nextjs/.next/
+packages/nextjs/out/
+
+# Hardhat artifacts and caches
+packages/hardhat/artifacts/
+packages/hardhat/cache/
+packages/hardhat/coverage/
+packages/hardhat/deployments/localhost/
+
+# Reports
+coverage/
+**/junit.xml
+
+# Logs
+yarn-error.log
