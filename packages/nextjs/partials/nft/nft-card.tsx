@@ -79,6 +79,25 @@ export function NFTCard(props: NFTCardProps) {
     console.debug("NFTCard: resolved image URL", { id, resolvedImage });
   }, [resolvedImage, id]);
 
+  // Determine if the description is rendered on a single line to add a tiny spacing only in that case
+  const descRef = useRef<HTMLParagraphElement | null>(null);
+  const [isSingleLineDesc, setIsSingleLineDesc] = useState(false);
+  useEffect(() => {
+    const el = descRef.current;
+    if (!el) return;
+    const compute = () => {
+      const style = window.getComputedStyle(el);
+      const lineHeight = parseFloat(style.lineHeight || "0");
+      // Use clientHeight for rendered height; compare with line height to infer number of lines
+      const lines = lineHeight > 0 ? Math.round(el.clientHeight / lineHeight) : 0;
+      const isClamped = el.scrollHeight > el.clientHeight + 1; // allow minor rounding
+      setIsSingleLineDesc(!isClamped && lines <= 1);
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, [description, sizes.text]);
+
   // Watchdog: if no load/error within timeout, rotate gateway
   useEffect(() => {
     hadEventRef.current = false;
@@ -112,6 +131,8 @@ export function NFTCard(props: NFTCardProps) {
         "group relative rounded-xl border border-white/5 bg-neutral-900/60 backdrop-blur-sm",
         "shadow-[0_10px_20px_-10px_rgba(0,0,0,0.35)] transition-all duration-200",
         "overflow-hidden focus:outline-none hover:shadow-[0_18px_28px_-12px_rgba(0,0,0,0.5)] hover:-translate-y-0.5",
+        // Make the card fill available height and layout vertically
+        "flex h-full flex-col",
         selectable && selected && "ring-2 ring-indigo-500",
         className,
       )}
@@ -129,7 +150,9 @@ export function NFTCard(props: NFTCardProps) {
       )}
 
       {/* Media */}
-      <figure className={clsx("relative w-full overflow-hidden rounded-lg bg-white", aspectClass(mediaAspect))}>
+      <figure
+        className={clsx("relative w-full overflow-hidden rounded-lg bg-white flex-shrink-0", aspectClass(mediaAspect))}
+      >
         {/* Skeleton while loading */}
         {isLoading && <div className="absolute inset-0 animate-pulse bg-neutral-100" aria-hidden="true" />}
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -179,50 +202,62 @@ export function NFTCard(props: NFTCardProps) {
       {/* Body */}
       <div
         className={clsx(
-          "space-y-3 border-t",
+          "gap-3 border-t",
           /* subtle surface that adapts to theme */
           "bg-base-100/60 dark:bg-[#818cf8]/10 border-[#818cf8]/30",
           "rounded-b-xl",
+          // Fill remaining vertical space so background color covers full card height
+          "grow flex flex-col",
           sizes.pad,
         )}
       >
-        <div className="flex items-start justify-between gap-2">
-          <h3 className={clsx("font-semibold tracking-[-0.01em] text-neutral-100", sizes.title)} title={name}>
-            <span className="line-clamp-2 leading-snug">{name}</span>
-          </h3>
-          {href && (
-            <Tooltip.Provider delayDuration={150}>
-              <Tooltip.Root>
-                <Tooltip.Trigger asChild>
-                  <a
-                    href={href}
-                    target={href.startsWith("http") ? "_blank" : undefined}
-                    rel={href.startsWith("http") ? "noreferrer" : undefined}
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/10 bg-neutral-900/70 text-neutral-300 transition-colors hover:text-white"
-                    aria-label="Open link"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                  </a>
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                  <Tooltip.Content
-                    sideOffset={6}
-                    className="rounded-md border border-white/10 bg-neutral-900 px-2 py-1 text-xs text-neutral-200 shadow-xl"
-                  >
-                    Open link
-                    <Tooltip.Arrow className="fill-neutral-900" />
-                  </Tooltip.Content>
-                </Tooltip.Portal>
-              </Tooltip.Root>
-            </Tooltip.Provider>
+        <div className="flex-1 flex flex-col gap-2 min-h-[1px]">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className={clsx("font-semibold tracking-[-0.01em] text-neutral-100", sizes.title)} title={name}>
+              <span className="line-clamp-2 leading-snug">{name}</span>
+            </h3>
+            {href && (
+              <Tooltip.Provider delayDuration={150}>
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <a
+                      href={href}
+                      target={href.startsWith("http") ? "_blank" : undefined}
+                      rel={href.startsWith("http") ? "noreferrer" : undefined}
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/10 bg-neutral-900/70 text-neutral-300 transition-colors hover:text-white"
+                      aria-label="Open link"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content
+                      sideOffset={6}
+                      className="rounded-md border border-white/10 bg-neutral-900 px-2 py-1 text-xs text-neutral-200 shadow-xl"
+                    >
+                      Open link
+                      <Tooltip.Arrow className="fill-neutral-900" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
+            )}
+          </div>
+
+          {description && (
+            <p
+              ref={descRef}
+              className={clsx(
+                "line-clamp-3 text-neutral-300 leading-relaxed",
+                isSingleLineDesc ? "mb-1" : "mb-0",
+                sizes.text,
+              )}
+              title={description}
+            >
+              {description}
+            </p>
           )}
         </div>
-
-        {description && (
-          <p className={clsx("line-clamp-3 text-neutral-300 leading-relaxed", sizes.text)} title={description}>
-            {description}
-          </p>
-        )}
 
         <div className="h-px w-full bg-gradient-to-r from-white/5 via-white/10 to-white/5" />
 
@@ -305,7 +340,7 @@ export function NFTCard(props: NFTCardProps) {
 
   if (href && !href.startsWith("http")) {
     return (
-      <Link href={href} className="block focus:outline-none">
+      <Link href={href} className="block h-full focus:outline-none">
         {CardInner}
       </Link>
     );
