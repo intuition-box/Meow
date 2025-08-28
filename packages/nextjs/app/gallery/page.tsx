@@ -335,14 +335,6 @@ const GalleryPage: NextPage = () => {
         <h1 className="text-center mb-8">
           <span className="block text-4xl font-bold">Gallery</span>
         </h1>
-        {/* Price display (no button), visible even if there are no cards */}
-        {effectiveMintPrice != null && (
-          <div className="flex justify-center mb-2">
-            <span className="text-sm text-neutral-300">
-              Price: {formatEther(BigInt(effectiveMintPrice as any))} TTRUST
-            </span>
-          </div>
-        )}
         <div className="flex-1">
           {!yourCollectibleContract ? (
             <div className="flex justify-center items-center mt-10">
@@ -363,14 +355,17 @@ const GalleryPage: NextPage = () => {
                 name="Mint your first Kitten"
                 imageUrl=""
                 description="No kittens yet. Mint the first one!"
+                priceLoading={effectiveMintPrice == null}
                 priceAmount={effectiveMintPrice != null ? formatEther(BigInt(effectiveMintPrice as any)) : undefined}
                 priceUnit="TTRUST"
                 ctaPrimary={{
                   label: minting
                     ? "Minting…"
-                    : effectiveMintPrice != null
-                      ? `Mint for ${formatEther(BigInt(effectiveMintPrice as any))} TTRUST`
-                      : "Mint",
+                    : !saleActive
+                      ? "Mint inactive"
+                      : effectiveMintPrice != null
+                        ? `Mint for ${formatEther(BigInt(effectiveMintPrice as any))} TTRUST`
+                        : "Fetching price…",
                   onClick: async () => {
                     try {
                       if (effectiveMintPrice == null) return;
@@ -406,76 +401,88 @@ const GalleryPage: NextPage = () => {
               />
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 my-6 items-stretch mx-auto">
-              {minting && (
-                <NFTCard
-                  key="minting"
-                  id="minting"
-                  name="Minting new Kitten…"
-                  imageUrl=""
-                  description="Waiting for confirmation…"
-                  priceAmount={effectiveMintPrice != null ? formatEther(BigInt(effectiveMintPrice as any)) : undefined}
-                  priceUnit="TTRUST"
-                  ctaPrimary={{
-                    label: "Minting…",
-                    onClick: () => {},
-                    disabled: true,
-                    loading: true,
-                  }}
-                  mediaAspect="3:4"
-                />
-              )}
-              {items.map(nft => (
-                <NFTCard
-                  key={nft.id}
-                  id={nft.id}
-                  name={nft.name ?? `Token #${nft.id}`}
-                  imageUrl={nft.image ?? ""}
-                  description={nft.description}
-                  owner={nft.owner}
-                  priceAmount={effectiveMintPrice != null ? formatEther(BigInt(effectiveMintPrice as any)) : undefined}
-                  priceUnit="TTRUST"
-                  ctaPrimary={{
-                    label: minting
-                      ? "Minting…"
-                      : effectiveMintPrice != null
-                        ? `Mint for ${formatEther(BigInt(effectiveMintPrice as any))} TTRUST`
-                        : "Mint",
-                    onClick: async () => {
-                      try {
-                        if (effectiveMintPrice == null) return;
-                        setMinting(true);
-                        await writeContractAsync(
-                          {
-                            functionName: "mintKitten" as any,
-                            args: [] as any,
-                            value: effectiveMintPrice as unknown as bigint,
-                          } as any,
-                          {
-                            blockConfirmations: 1,
-                            onBlockConfirmation: () => {
-                              // Force refresh after mint
-                              ignoreCacheRef.current = true;
-                              loadedForAddressRef.current = null;
-                              setLoading(true);
-                              setTimeout(() => setLoading(false), 0);
+            <>
+              {/* Status row removed per request */}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 my-6 items-stretch mx-auto">
+                {minting && (
+                  <NFTCard
+                    key="minting"
+                    id="minting"
+                    name="Minting new Kitten…"
+                    imageUrl=""
+                    description="Waiting for confirmation…"
+                    priceLoading={effectiveMintPrice == null}
+                    priceAmount={
+                      effectiveMintPrice != null ? formatEther(BigInt(effectiveMintPrice as any)) : undefined
+                    }
+                    priceUnit="TTRUST"
+                    ctaPrimary={{
+                      label: "Minting…",
+                      onClick: () => {},
+                      disabled: true,
+                      loading: true,
+                    }}
+                    mediaAspect="3:4"
+                  />
+                )}
+                {items.map(nft => (
+                  <NFTCard
+                    key={nft.id}
+                    id={nft.id}
+                    name={nft.name ?? `Token #${nft.id}`}
+                    imageUrl={nft.image ?? ""}
+                    description={nft.description}
+                    owner={nft.owner}
+                    priceLoading={effectiveMintPrice == null}
+                    priceAmount={
+                      effectiveMintPrice != null ? formatEther(BigInt(effectiveMintPrice as any)) : undefined
+                    }
+                    priceUnit="TTRUST"
+                    ctaPrimary={{
+                      label: minting
+                        ? "Minting…"
+                        : !saleActive
+                          ? "Mint inactive"
+                          : effectiveMintPrice != null
+                            ? `Mint for ${formatEther(BigInt(effectiveMintPrice as any))} TTRUST`
+                            : "Fetching price…",
+                      onClick: async () => {
+                        try {
+                          if (effectiveMintPrice == null) return;
+                          setMinting(true);
+                          await writeContractAsync(
+                            {
+                              functionName: "mintKitten" as any,
+                              args: [] as any,
+                              value: effectiveMintPrice as unknown as bigint,
+                            } as any,
+                            {
+                              blockConfirmations: 1,
+                              onBlockConfirmation: () => {
+                                // Force refresh after mint
+                                ignoreCacheRef.current = true;
+                                loadedForAddressRef.current = null;
+                                setLoading(true);
+                                setTimeout(() => setLoading(false), 0);
+                              },
                             },
-                          },
-                        );
-                        notification.success("Minted a new kitten!");
-                      } catch (e: any) {
-                        notification.error(e?.shortMessage || e?.message || "Mint failed");
-                      } finally {
-                        setMinting(false);
-                      }
-                    },
-                    disabled: !saleActive || minting || effectiveMintPrice == null,
-                    loading: minting,
-                  }}
-                  mediaAspect="3:4"
-                />
-              ))}
-            </div>
+                          );
+                          notification.success("Minted a new kitten!");
+                        } catch (e: any) {
+                          notification.error(e?.shortMessage || e?.message || "Mint failed");
+                        } finally {
+                          setMinting(false);
+                        }
+                      },
+                      disabled: !saleActive || minting || effectiveMintPrice == null,
+                      loading: minting,
+                    }}
+                    mediaAspect="3:4"
+                  />
+                ))}
+              </div>
+            </>
           )}
 
           {/* Refresh and cache status */}
