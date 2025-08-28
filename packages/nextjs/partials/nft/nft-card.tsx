@@ -155,7 +155,10 @@ export function NFTCard(props: NFTCardProps) {
 
       {/* Media */}
       <figure
-        className={clsx("relative w-full overflow-hidden rounded-lg bg-white flex-shrink-0", aspectClass(mediaAspect))}
+        className={clsx(
+          "relative w-full overflow-hidden rounded-t-lg bg-white flex-shrink-0",
+          aspectClass(mediaAspect),
+        )}
       >
         {/* Spinner while loading */}
         {isLoading && (

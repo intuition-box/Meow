@@ -16,8 +16,8 @@ export const NFTCardSkeleton: FC<{ className?: string; withFooter?: boolean }> =
         className,
       )}
     >
-      <div className="relative w-full aspect-square bg-neutral-800 animate-pulse" />
-      <div className="p-4 space-y-2">
+      <div className="relative w-full aspect-square bg-neutral-800 animate-pulse rounded-t-lg" />
+      <div className="p-4 space-y-2 rounded-b-xl">
         <div className="h-5 w-2/3 rounded-md bg-neutral-800 animate-pulse" />
         <div className="h-4 w-1/2 rounded-md bg-neutral-800 animate-pulse" />
         {withFooter && (
