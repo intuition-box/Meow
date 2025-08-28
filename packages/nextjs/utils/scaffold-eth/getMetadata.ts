@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
   : `http://localhost:${process.env.PORT || 3000}`;
-const titleTemplate = "%s | SpeedRunEthereum";
+// Use a neutral template so callers can control full title
+const titleTemplate = "%s";
 
 export const getMetadata = ({
   title,
@@ -43,8 +44,9 @@ export const getMetadata = ({
       description: description,
       images: [imageUrl],
     },
+    // Point to app/icon.svg to ensure favicon shows across browsers
     icons: {
-      icon: [],
+      icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     },
   };
 };
