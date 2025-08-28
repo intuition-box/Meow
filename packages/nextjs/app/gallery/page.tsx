@@ -2,11 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useAccount, usePublicClient } from "wagmi";
 import { useScaffoldContract } from "~~/hooks/scaffold-eth";
-import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
 import { NFTCard } from "~~/partials/nft/nft-card";
-import { notification } from "~~/utils/scaffold-eth";
 import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
 
 export interface GalleryItem extends Partial<NFTMetaData> {
@@ -62,39 +59,14 @@ const withTimeout = async <T,>(p: Promise<T>, ms = 10000, label = "operation") =
 
 const GalleryPage = () => {
   const [items, setItems] = useState<GalleryItem[]>([]);
-  const [pagesLoaded, setPagesLoaded] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [minting, setMinting] = useState(false);
   const [loadedOnce, setLoadedOnce] = useState(false);
 
   const { data: yourCollectibleContract } = useScaffoldContract({ contractName: "YourCollectible" });
-  const publicClient = usePublicClient();
   const loadedForAddressRef = useRef<string | null>(null);
   const loadingRef = useRef(false);
   const ignoreCacheRef = useRef(false);
-
-  // Static token URIs available for minting (from metadata/manifest.json)
-  const TOKEN_URIS: string[] = [
-    "https://bafybeid23csx6zqebrw4qlkq4lkc4lz4tuk3xtt7jsp7i3gkl4bl5g4nx4.ipfs.w3s.link/image-kitten-01.json",
-    "https://bafybeibdbqusjudzq2254znouotv4fqxodiye5vqp57ulhe5skuiselvuu.ipfs.w3s.link/image-kitten-02.json",
-    "https://bafybeiem2ypnqmmuhkzpxa555bzv3vw7x7g53q2i3mhqmnvw7nuaeeev4a.ipfs.w3s.link/image-kitten-03.json",
-    "https://bafybeiahaisrbsdlvkcxdtzaya4pc4p2sxd6e6czfvn5k4b6ypbuglc6ri.ipfs.w3s.link/image-kitten-04.json",
-    "https://bafybeiey4wcignlnfyietlqp732opz27jm4f3hny2btyekufdmdrs454ke.ipfs.w3s.link/image-kitten-05.json",
-    "https://bafybeiapkbf5idi4we45jahvfzqk5v2h7aggandajyw5wzj4w6js4mwzmi.ipfs.w3s.link/image-kitten-06.json",
-    "https://bafybeifyg7vk5fl2ljlpski6fppof6lqzexwsnnlq47yakxwpirrelqvxm.ipfs.w3s.link/image-kitten-07.json",
-    "https://bafybeig3wma23unyyo77cjz4zk6dewkraqseaycxbvmhu5y2trwewaipfq.ipfs.w3s.link/image-kitten-08.json",
-    "https://bafybeigh6kr3iuil5fh62bovp3byn3jbf2vgs7mrumb442ihu5mv3ftsoi.ipfs.w3s.link/image-kitten-09.json",
-    "https://bafybeibm3ra626vruqamsuiubsl7gr4yto5wquogagd7zpxt34s55bbs7e.ipfs.w3s.link/image-kitten-10.json",
-    "https://bafybeib3ytqqi2k4z3bkozywgjh32vsizkw3hjgnebkwa4tgadl3v5sxfy.ipfs.w3s.link/image-kitten-11.json",
-    "https://bafybeig46duegh3rund26vucqfk2vmjekho2k7hihtatjkcw4epnli6nbi.ipfs.w3s.link/image-kitten-12.json",
-  ];
-  const usedUris = new Set(items.map(i => i.uri));
-  const nextMintUri = TOKEN_URIS.find(u => !usedUris.has(u));
-
-  const { address } = useAccount();
-  // Write: mintItem
-  const { writeContractAsync } = useScaffoldWriteContract({ contractName: "YourCollectible" });
 
   const readCache = (addr: string) => {
     try {
@@ -242,7 +214,6 @@ const GalleryPage = () => {
         // Update state and cache
         if (isMounted) {
           setItems(fetched);
-          setPagesLoaded(1);
         }
         if (contractAddress) loadedForAddressRef.current = contractAddress;
         if (contractAddress) writeCache(contractAddress, fetched);
@@ -285,55 +256,16 @@ const GalleryPage = () => {
               <span className="loading loading-spinner" />
             </div>
           ) : (
-            <div className="my-6 max-w-md mx-auto">
-              <NFTCard
-                id={0}
-                name="Mint your first Kitten"
-                imageUrl=""
-                description="No kittens yet. Mint the first one!"
-                ctaPrimary={{
-                  label: minting ? "Minting…" : nextMintUri ? "Mint" : "Sold out",
-                  onClick: async () => {
-                    try {
-                      if (!address) throw new Error("Connect wallet");
-                      const to = address; // already typed as `0x${string}` from useAccount
-                      if (!nextMintUri) throw new Error("Sold out");
-                      const mintUri: string = nextMintUri;
-                      setMinting(true);
-                      const hash = (await writeContractAsync({
-                        functionName: "mintItem",
-                        args: [to, mintUri],
-                      } as any)) as `0x${string}`;
-                      notification.info("Mint submitted. Waiting for confirmation…");
-                      if (!publicClient) throw new Error("No public client");
-                      await publicClient.waitForTransactionReceipt({ hash });
-                      notification.success("Mint confirmed! Refreshing…");
-                      ignoreCacheRef.current = true;
-                      loadedForAddressRef.current = null;
-                      setTimeout(() => {
-                        setMinting(false);
-                        setLoading(true);
-                      }, 800);
-                    } catch (e: any) {
-                      console.error(e);
-                      notification.error(e?.shortMessage || e?.message || "Mint failed");
-                      setMinting(false);
-                    }
-                  },
-                  disabled: minting || !address || !nextMintUri,
-                }}
-              />
+            <div className="my-10 text-center text-neutral-700 dark:text-neutral-200">
+              <p>No NFTs found in this collection.</p>
             </div>
           )
         ) : (
-          <>
-            {minting && (
-              <div className="flex justify-center items-center my-2">
-                <span className="loading loading-spinner loading-sm" aria-label="Minting" />
-              </div>
-            )}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 my-6 items-stretch mx-auto">
-              {items.slice(0, pagesLoaded * 12).map(nft => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 my-6 items-stretch mx-auto">
+            {(() => {
+              const visible = items.slice(0, 12);
+              const soldOut = items.length >= 12;
+              return visible.map(nft => (
                 <NFTCard
                   key={nft.id}
                   id={nft.id}
@@ -342,18 +274,11 @@ const GalleryPage = () => {
                   description={nft.description || ""}
                   owner={nft.owner || undefined}
                   mediaAspect="1:1"
-                  ctaPrimary={!nextMintUri ? { label: "Sold out", disabled: true, onClick: () => {} } : undefined}
+                  ctaPrimary={soldOut ? { label: "Sold out", disabled: true, onClick: () => {} } : undefined}
                 />
-              ))}
-            </div>
-            {items.length > pagesLoaded * 12 && (
-              <div className="flex justify-center mt-4">
-                <button className="btn btn-outline" onClick={() => setPagesLoaded(p => p + 1)}>
-                  Load more
-                </button>
-              </div>
-            )}
-          </>
+              ));
+            })()}
+          </div>
         )}
 
         {/* Refresh status only when active */}
