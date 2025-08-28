@@ -366,8 +366,9 @@ const GalleryPage: NextPage = () => {
                 priceAmount={effectiveMintPrice != null ? formatEther(BigInt(effectiveMintPrice as any)) : undefined}
                 priceUnit="TTRUST"
                 ctaPrimary={{
-                  label:
-                    effectiveMintPrice != null
+                  label: minting
+                    ? "Minting…"
+                    : effectiveMintPrice != null
                       ? `Mint for ${formatEther(BigInt(effectiveMintPrice as any))} TTRUST`
                       : "Mint",
                   onClick: async () => {
@@ -399,12 +400,31 @@ const GalleryPage: NextPage = () => {
                     }
                   },
                   disabled: !saleActive || minting || effectiveMintPrice == null,
+                  loading: minting,
                 }}
                 mediaAspect="3:4"
               />
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 my-6 items-stretch mx-auto">
+              {minting && (
+                <NFTCard
+                  key="minting"
+                  id="minting"
+                  name="Minting new Kitten…"
+                  imageUrl=""
+                  description="Waiting for confirmation…"
+                  priceAmount={effectiveMintPrice != null ? formatEther(BigInt(effectiveMintPrice as any)) : undefined}
+                  priceUnit="TTRUST"
+                  ctaPrimary={{
+                    label: "Minting…",
+                    onClick: () => {},
+                    disabled: true,
+                    loading: true,
+                  }}
+                  mediaAspect="3:4"
+                />
+              )}
               {items.map(nft => (
                 <NFTCard
                   key={nft.id}
@@ -416,8 +436,9 @@ const GalleryPage: NextPage = () => {
                   priceAmount={effectiveMintPrice != null ? formatEther(BigInt(effectiveMintPrice as any)) : undefined}
                   priceUnit="TTRUST"
                   ctaPrimary={{
-                    label:
-                      effectiveMintPrice != null
+                    label: minting
+                      ? "Minting…"
+                      : effectiveMintPrice != null
                         ? `Mint for ${formatEther(BigInt(effectiveMintPrice as any))} TTRUST`
                         : "Mint",
                     onClick: async () => {
@@ -449,6 +470,7 @@ const GalleryPage: NextPage = () => {
                       }
                     },
                     disabled: !saleActive || minting || effectiveMintPrice == null,
+                    loading: minting,
                   }}
                   mediaAspect="3:4"
                 />

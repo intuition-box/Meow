@@ -4,6 +4,8 @@ export interface NFTCardAction {
   label: string;
   onClick: () => void;
   disabled?: boolean;
+  /** If true, shows a spinner in the button and disables it. */
+  loading?: boolean;
 }
 
 export interface NFTCardProps {
