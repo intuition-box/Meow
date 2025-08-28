@@ -12,8 +12,9 @@ export interface NFTCardProps {
   imageUrl: string;
   description?: string;
   owner?: string;
-  priceEth?: string | number;
-  /** Optional currency/unit label for price, defaults to "ETH" in the card if not provided */
+  /** Formatted amount to display (e.g., from formatEther). Unit-agnostic. */
+  priceAmount?: string | number;
+  /** Optional currency/unit label for price, defaults to "TTRUST" in the card if not provided */
   priceUnit?: string;
   badgeText?: string;
   mediaAspect?: MediaAspect;

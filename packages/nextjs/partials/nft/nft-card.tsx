@@ -48,7 +48,7 @@ export function NFTCard(props: NFTCardProps) {
     imageUrl,
     description,
     owner,
-    priceEth,
+    priceAmount,
     priceUnit,
     badgeText,
     mediaAspect = "1:1",
@@ -226,7 +226,12 @@ export function NFTCard(props: NFTCardProps) {
 
         <div className="h-px w-full bg-gradient-to-r from-white/5 via-white/10 to-white/5" />
 
-        <div className="flex items-center gap-2 text-neutral-400">
+        <div className="flex items-center justify-between gap-2 text-neutral-400 flex-wrap">
+          {priceAmount != null && (
+            <span className="rounded px-2 py-0.5 text-xs font-semibold text-neutral-100 bg-neutral-800">
+              {String(priceAmount)} {priceUnit || "TTRUST"}
+            </span>
+          )}
           {owner && (
             <div className="flex items-center gap-2 min-w-0">
               <span className="text-[10px] uppercase tracking-wide text-neutral-500/80">Owner</span>
@@ -249,11 +254,6 @@ export function NFTCard(props: NFTCardProps) {
                 </Tooltip.Root>
               </Tooltip.Provider>
             </div>
-          )}
-          {priceEth != null && (
-            <span className="ml-auto text-xs font-semibold text-neutral-200">
-              {String(priceEth)} {priceUnit || "ETH"}
-            </span>
           )}
         </div>
 
@@ -289,7 +289,7 @@ export function NFTCard(props: NFTCardProps) {
               <button
                 className={clsx(
                   "rounded-md border border-white/10 bg-neutral-800 text-neutral-100 hover:bg-neutral-700",
-                  "transition-colors transition-transform transform active:scale-95 will-change-transform",
+                  "transition-transform transform active:scale-95 will-change-transform",
                   sizes.btn,
                 )}
                 onClick={onClick}
