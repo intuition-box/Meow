@@ -321,7 +321,7 @@ export function NFTCard(props: NFTCardProps) {
             {ctaPrimary && (
               <button
                 className={clsx(
-                  "inline-flex items-center justify-center gap-2 rounded-md border border-transparent bg-[var(--color-primary)] text-[var(--color-primary-content)] hover:opacity-90",
+                  "inline-flex items-center justify-center gap-2 rounded-md border border-transparent bg-[#818cf8] text-white hover:opacity-90 dark:bg-[var(--color-primary)] dark:text-[var(--color-primary-content)]",
                   "transition-all duration-150 transform active:scale-95 will-change-transform",
                   sizes.btn,
                   (ctaPrimary.loading || ctaPrimary.disabled) && "opacity-80 cursor-not-allowed",
