@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { NFTCard } from "./NFTCard";
 import { useAccount } from "wagmi";
 import { useScaffoldContract, useScaffoldReadContract } from "~~/hooks/scaffold-eth";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
+import { NFTCard } from "~~/partials/nft/nft-card";
 import { notification } from "~~/utils/scaffold-eth";
 import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
 
@@ -17,6 +18,7 @@ export const MyHoldings = () => {
   const { address: connectedAddress } = useAccount();
   const [myAllCollectibles, setMyAllCollectibles] = useState<Collectible[]>([]);
   const [allCollectiblesLoading, setAllCollectiblesLoading] = useState(false);
+  const [transferringId, setTransferringId] = useState<number | null>(null);
 
   const { data: yourCollectibleContract } = useScaffoldContract({
     contractName: "YourCollectible",
@@ -28,6 +30,8 @@ export const MyHoldings = () => {
     args: [connectedAddress],
     watch: true,
   });
+
+  const { writeContractAsync } = useScaffoldWriteContract({ contractName: "YourCollectible" });
 
   useEffect(() => {
     const updateMyCollectibles = async (): Promise<void> => {
@@ -79,6 +83,34 @@ export const MyHoldings = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectedAddress, myTotalBalance]);
 
+  const transferToken = async (tokenId: number) => {
+    try {
+      if (!connectedAddress) {
+        notification.error("Connect your wallet to transfer");
+        return;
+      }
+      const to = window.prompt("Enter recipient address (0x...):")?.trim();
+      if (!to) return;
+      if (!to.startsWith("0x") || to.length !== 42) {
+        notification.error("Invalid address");
+        return;
+      }
+      setTransferringId(tokenId);
+      await writeContractAsync({
+        functionName: "safeTransferFrom",
+        args: [connectedAddress as `0x${string}`, to as `0x${string}`, BigInt(tokenId)],
+        account: connectedAddress as `0x${string}`,
+        chainId: 13579,
+      } as any);
+      notification.success("Transfer submitted");
+    } catch (e: any) {
+      console.error(e);
+      notification.error(e?.shortMessage || e?.message || "Transfer failed");
+    } finally {
+      setTransferringId(null);
+    }
+  };
+
   if (allCollectiblesLoading)
     return (
       <div className="flex justify-center items-center mt-10">
@@ -93,9 +125,23 @@ export const MyHoldings = () => {
           <div className="text-2xl text-neutral-700 dark:text-neutral-200">No NFTs found</div>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-4 my-8 px-5 justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 my-6 items-stretch mx-auto">
           {myAllCollectibles.map(item => (
-            <NFTCard nft={item} key={item.id} />
+            <NFTCard
+              key={item.id}
+              id={item.id}
+              name={item.name || `Token #${item.id}`}
+              imageUrl={item.image || ""}
+              description={(item.description || "").slice(0, 90)}
+              owner={item.owner}
+              mediaAspect="1:1"
+              size="sm"
+              ctaPrimary={{
+                label: "Transfer",
+                loading: transferringId === item.id,
+                onClick: () => transferToken(item.id),
+              }}
+            />
           ))}
         </div>
       )}
