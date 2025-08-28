@@ -36,12 +36,24 @@ export const normalizeIpfsUrl = (url: string): string => {
   if (!url) return url;
   // If the URL already uses ipfs://, resolve normally
   if (url.startsWith("ipfs://")) return resolveToHttp(url);
-  // If the URL is an http(s) to a known gateway, rewrite to primary gateway
+  // Rewrite known path-style gateways to our primary gateway
   for (const gw of IPFS_GATEWAYS) {
     if (url.startsWith(gw)) {
       const path = url.slice(gw.length);
       return `${IPFS_GATEWAYS[0]}${path}`;
     }
+  }
+  // Normalize common subdomain-style gateways: https://<cid>.ipfs.<host>/<path>
+  try {
+    const u = new URL(url);
+    const m = u.hostname.match(/^([a-z0-9]{46,})\.ipfs\./i);
+    if (m) {
+      const cid = m[1];
+      const rest = u.pathname.replace(/^\//, "");
+      return `${IPFS_GATEWAYS[0]}${cid}/${rest}`;
+    }
+  } catch {
+    // ignore parse errors
   }
   return url;
 };

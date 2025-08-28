@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { IPFS_GATEWAYS, nextIpfsGatewayUrl, resolveToHttp, withImageFallback } from "./ipfs-utils";
+import { IPFS_GATEWAYS, nextIpfsGatewayUrl, normalizeIpfsUrl, resolveToHttp, withImageFallback } from "./ipfs-utils";
 import { cardVariants, computeTilt, motionProps, sheenVariants } from "./nft-card.motion";
 import { NFTCardProps } from "./nft-card.types";
 import * as Tooltip from "@radix-ui/react-tooltip";
@@ -64,7 +64,10 @@ export function NFTCard(props: NFTCardProps) {
   const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
   const sizes = sizeClass(size);
 
-  const resolvedImage = useMemo(() => withImageFallback(resolveToHttp(imageUrl)), [imageUrl]);
+  const resolvedImage = useMemo(() => {
+    const normalized = normalizeIpfsUrl(imageUrl);
+    return withImageFallback(resolveToHttp(normalized));
+  }, [imageUrl]);
   const [imageSrc, setImageSrc] = useState(resolvedImage);
   const watchdogRef = useRef<number | null>(null);
   const hadEventRef = useRef(false);
@@ -72,10 +75,13 @@ export function NFTCard(props: NFTCardProps) {
   const MAX_ATTEMPTS = IPFS_GATEWAYS.length;
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    setImageSrc(resolvedImage);
-    setIsLoading(true);
-    console.debug("NFTCard: resolved image URL", { id, resolvedImage });
-  }, [resolvedImage, id]);
+    if (imageSrc !== resolvedImage) {
+      setImageSrc(resolvedImage);
+      setIsLoading(true);
+      attemptsRef.current = 0;
+      console.debug("NFTCard: resolved image URL", { id, resolvedImage });
+    }
+  }, [resolvedImage, id, imageSrc]);
 
   // Determine if the description is rendered on a single line to add a tiny spacing only in that case
   const descRef = useRef<HTMLParagraphElement | null>(null);
@@ -109,7 +115,7 @@ export function NFTCard(props: NFTCardProps) {
         next,
         attempts: attemptsRef.current,
       });
-      if (next && attemptsRef.current < MAX_ATTEMPTS) {
+      if (next && next !== imageSrc && attemptsRef.current < MAX_ATTEMPTS) {
         attemptsRef.current += 1;
         setImageSrc(next);
       } else {
@@ -117,7 +123,7 @@ export function NFTCard(props: NFTCardProps) {
         setImageSrc(withImageFallback(""));
         setIsLoading(false);
       }
-    }, 4000);
+    }, 7000);
     return () => {
       if (watchdogRef.current) window.clearTimeout(watchdogRef.current);
     };
@@ -151,8 +157,12 @@ export function NFTCard(props: NFTCardProps) {
       <figure
         className={clsx("relative w-full overflow-hidden rounded-lg bg-white flex-shrink-0", aspectClass(mediaAspect))}
       >
-        {/* Skeleton while loading */}
-        {isLoading && <div className="absolute inset-0 animate-pulse bg-neutral-100" aria-hidden="true" />}
+        {/* Spinner while loading */}
+        {isLoading && (
+          <div className="absolute inset-0 grid place-items-center bg-neutral-100" aria-hidden="true">
+            <span className="loading loading-spinner" aria-label="Loading image" />
+          </div>
+        )}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imageSrc}
@@ -162,8 +172,7 @@ export function NFTCard(props: NFTCardProps) {
             "transition-opacity duration-500",
             isLoading ? "opacity-0" : "opacity-100",
           )}
-          loading="eager"
-          fetchPriority="high"
+          loading="lazy"
           decoding="async"
           onLoad={() => {
             console.debug("NFTCard: image loaded", { id, src: imageSrc });
@@ -176,7 +185,7 @@ export function NFTCard(props: NFTCardProps) {
             console.warn("NFTCard: image failed, rotating gateway", { id, failed: imageSrc, next });
             hadEventRef.current = true;
             if (watchdogRef.current) window.clearTimeout(watchdogRef.current);
-            if (next) {
+            if (next && next !== imageSrc) {
               attemptsRef.current += 1;
               setIsLoading(true);
               setImageSrc(next);

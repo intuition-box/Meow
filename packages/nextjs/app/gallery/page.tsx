@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import type { NextPage } from "next";
-import { useWalletClient } from "wagmi";
+import { useAccount, usePublicClient } from "wagmi";
 import { useScaffoldContract } from "~~/hooks/scaffold-eth";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
 import { NFTCard } from "~~/partials/nft/nft-card";
@@ -61,14 +60,16 @@ const withTimeout = async <T,>(p: Promise<T>, ms = 10000, label = "operation") =
   }
 };
 
-const GalleryPage: NextPage = () => {
+const GalleryPage = () => {
   const [items, setItems] = useState<GalleryItem[]>([]);
+  const [pagesLoaded, setPagesLoaded] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [usedCache, setUsedCache] = useState(false);
   const [minting, setMinting] = useState(false);
+  const [loadedOnce, setLoadedOnce] = useState(false);
 
   const { data: yourCollectibleContract } = useScaffoldContract({ contractName: "YourCollectible" });
+  const publicClient = usePublicClient();
   const loadedForAddressRef = useRef<string | null>(null);
   const loadingRef = useRef(false);
   const ignoreCacheRef = useRef(false);
@@ -91,7 +92,7 @@ const GalleryPage: NextPage = () => {
   const usedUris = new Set(items.map(i => i.uri));
   const nextMintUri = TOKEN_URIS.find(u => !usedUris.has(u));
 
-  const { data: walletClient } = useWalletClient();
+  const { address } = useAccount();
   // Write: mintItem
   const { writeContractAsync } = useScaffoldWriteContract({ contractName: "YourCollectible" });
 
@@ -100,7 +101,7 @@ const GalleryPage: NextPage = () => {
       const raw = localStorage.getItem(`gallery:${addr}`);
       if (!raw) return null;
       const parsed = JSON.parse(raw) as { ts: number; items: GalleryItem[] };
-      const MAX_AGE_MS = 5 * 60 * 1000; // 5 minutes
+      const MAX_AGE_MS = 30 * 60 * 1000; // 30 minutes
       if (Date.now() - parsed.ts > MAX_AGE_MS) return null;
       return parsed.items || null;
     } catch {
@@ -135,7 +136,6 @@ const GalleryPage: NextPage = () => {
           if (cached) {
             if (isMounted) {
               setItems(cached);
-              setUsedCache(true);
             }
           }
         }
@@ -162,11 +162,11 @@ const GalleryPage: NextPage = () => {
               try {
                 await yourCollectibleContract.read.ownerOf([BigInt(i)]);
                 tokenId = BigInt(i);
-                console.debug("gallery: fallback 0-based tokenId", tokenId);
+                // debug: fallback 0-based tokenId
               } catch {
                 // Fallback B: assume 1-based sequential IDs
                 tokenId = BigInt(i + 1);
-                console.debug("gallery: fallback 1-based tokenId", tokenId);
+                // debug: fallback 1-based tokenId
               }
             }
 
@@ -175,11 +175,9 @@ const GalleryPage: NextPage = () => {
               yourCollectibleContract.read.ownerOf([tokenId!]),
             ]);
             const resolved = resolveToHttp(tokenURI);
-            console.debug("Gallery: token", { tokenId: Number(tokenId), tokenURI, resolved });
             let meta: NFTMetaData | undefined;
             try {
               meta = await fetchJsonWithTimeout(resolved, 8000);
-              console.debug("Gallery: metadata fetched", { tokenId: Number(tokenId) });
             } catch (e) {
               console.warn("Gallery: metadata fetch failed", {
                 tokenId: Number(tokenId),
@@ -234,58 +232,62 @@ const GalleryPage: NextPage = () => {
 
           const zeroBased = await discover(0);
           const oneBased = await discover(1);
-          const combined = [...zeroBased, ...oneBased].reduce((map, item) => {
+          const combinedMap = [...zeroBased, ...oneBased].reduce((map, item) => {
             map.set(item.id, item);
             return map;
           }, new Map<number, GalleryItem>());
-          fetched = Array.from(combined.values()).sort((a, b) => a.id - b.id);
+          fetched = Array.from(combinedMap.values()).sort((a, b) => a.id - b.id);
         }
 
-        if (isMounted) setItems(fetched);
+        // Update state and cache
+        if (isMounted) {
+          setItems(fetched);
+          setPagesLoaded(1);
+        }
         if (contractAddress) loadedForAddressRef.current = contractAddress;
         if (contractAddress) writeCache(contractAddress, fetched);
-        ignoreCacheRef.current = false; // reset
-      } catch (err: any) {
-        console.error(err);
-        const msg = err?.message?.includes("timed out")
-          ? "Network slow or wrong chain. Check you are on Intuition (13579) and RPC is reachable."
-          : "Error loading gallery";
-        setError(msg);
-        notification.error("Error loading gallery");
+        ignoreCacheRef.current = false;
+      } catch (e: any) {
+        console.error(e);
+        if (isMounted) setError(e?.message || "Failed to load gallery");
       } finally {
-        if (isMounted) setLoading(false);
         loadingRef.current = false;
+        if (isMounted) {
+          setLoading(false);
+          setLoadedOnce(true);
+        }
       }
     };
-    loadAll();
+
+    withTimeout(loadAll(), 20000, "load gallery");
     return () => {
       isMounted = false;
     };
   }, [yourCollectibleContract]);
 
+  // Render
   return (
-    <section className="flex items-center justify-center grow pt-14 pb-24 px-6">
-      <div className="w-full max-w-6xl flex flex-col">
-        <h1 className="text-center mb-8">
-          <span className="block text-4xl font-bold">Gallery</span>
-        </h1>
-        <div className="flex-1">
-          {!yourCollectibleContract ? (
-            <div className="flex justify-center items-center mt-10">
-              <div className="text-2xl">Connecting to contract… Ensure you are on Intuition (13579).</div>
+    <section className="min-h-screen">
+      <div className="container mx-auto px-4">
+        <div className="mt-10 mb-10 grid grid-cols-1 items-center">
+          <h1 className="text-center text-3xl md:text-5xl font-bold">Gallery</h1>
+        </div>
+
+        {error && (
+          <div className="alert alert-error my-4">
+            <span>{error}</span>
+          </div>
+        )}
+
+        {items.length === 0 ? (
+          loading || ignoreCacheRef.current || !loadedOnce ? (
+            <div className="flex justify-center my-10">
+              <span className="loading loading-spinner" />
             </div>
-          ) : loading ? (
-            <div className="flex justify-center items-center mt-10">
-              <span className="loading loading-spinner loading-lg"></span>
-            </div>
-          ) : error ? (
-            <div className="flex justify-center items-center mt-10">
-              <div className="text-2xl text-error">{error}</div>
-            </div>
-          ) : items.length === 0 ? (
-            <div className="flex justify-center my-6">
+          ) : (
+            <div className="my-6 max-w-md mx-auto">
               <NFTCard
-                id="placeholder"
+                id={0}
                 name="Mint your first Kitten"
                 imageUrl=""
                 description="No kittens yet. Mint the first one!"
@@ -293,130 +295,76 @@ const GalleryPage: NextPage = () => {
                   label: minting ? "Minting…" : nextMintUri ? "Mint" : "Sold out",
                   onClick: async () => {
                     try {
-                      const to = walletClient?.account?.address as `0x${string}` | undefined;
-                      if (!to) return notification.error("Connect your wallet to mint");
-                      if (!nextMintUri) return notification.error("No more kittens to mint");
+                      if (!address) throw new Error("Connect wallet");
+                      const to = address; // already typed as `0x${string}` from useAccount
+                      if (!nextMintUri) throw new Error("Sold out");
+                      const mintUri: string = nextMintUri;
                       setMinting(true);
-                      await writeContractAsync(
-                        {
-                          functionName: "mintItem" as any,
-                          args: [to, nextMintUri] as any,
-                        } as any,
-                        {
-                          blockConfirmations: 1,
-                          onBlockConfirmation: () => {
-                            // Force refresh after mint
-                            ignoreCacheRef.current = true;
-                            loadedForAddressRef.current = null;
-                            setLoading(true);
-                            setTimeout(() => setLoading(false), 0);
-                          },
-                        },
-                      );
-                      notification.success("Minted a new kitten!");
+                      const hash = (await writeContractAsync({
+                        functionName: "mintItem",
+                        args: [to, mintUri],
+                      } as any)) as `0x${string}`;
+                      notification.info("Mint submitted. Waiting for confirmation…");
+                      if (!publicClient) throw new Error("No public client");
+                      await publicClient.waitForTransactionReceipt({ hash });
+                      notification.success("Mint confirmed! Refreshing…");
+                      ignoreCacheRef.current = true;
+                      loadedForAddressRef.current = null;
+                      setTimeout(() => {
+                        setMinting(false);
+                        setLoading(true);
+                      }, 800);
                     } catch (e: any) {
+                      console.error(e);
                       notification.error(e?.shortMessage || e?.message || "Mint failed");
-                    } finally {
                       setMinting(false);
                     }
                   },
-                  disabled: minting || !nextMintUri || !walletClient,
-                  loading: minting,
+                  disabled: minting || !address || !nextMintUri,
                 }}
-                mediaAspect="3:4"
               />
             </div>
-          ) : (
-            <>
-              {/* Status row removed per request */}
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 my-6 items-stretch mx-auto">
-                {minting && (
-                  <NFTCard
-                    key="minting"
-                    id="minting"
-                    name="Minting new Kitten…"
-                    imageUrl=""
-                    description="Waiting for confirmation…"
-                    ctaPrimary={{
-                      label: "Minting…",
-                      onClick: () => {},
-                      disabled: true,
-                      loading: true,
-                    }}
-                    mediaAspect="3:4"
-                  />
-                )}
-                {items.map(nft => (
-                  <NFTCard
-                    key={nft.id}
-                    id={nft.id}
-                    name={nft.name ?? `Token #${nft.id}`}
-                    imageUrl={nft.image ?? ""}
-                    description={nft.description}
-                    owner={nft.owner}
-                    ctaPrimary={{
-                      label: minting ? "Minting…" : nextMintUri ? "Mint" : "Sold out",
-                      onClick: async () => {
-                        try {
-                          const to = walletClient?.account?.address as `0x${string}` | undefined;
-                          if (!to) return notification.error("Connect your wallet to mint");
-                          if (!nextMintUri) return notification.error("No more kittens to mint");
-                          setMinting(true);
-                          await writeContractAsync(
-                            {
-                              functionName: "mintItem" as any,
-                              args: [to, nextMintUri] as any,
-                            } as any,
-                            {
-                              blockConfirmations: 1,
-                              onBlockConfirmation: () => {
-                                // Force refresh after mint
-                                ignoreCacheRef.current = true;
-                                loadedForAddressRef.current = null;
-                                setLoading(true);
-                                setTimeout(() => setLoading(false), 0);
-                              },
-                            },
-                          );
-                          notification.success("Minted a new kitten!");
-                        } catch (e: any) {
-                          notification.error(e?.shortMessage || e?.message || "Mint failed");
-                        } finally {
-                          setMinting(false);
-                        }
-                      },
-                      disabled: minting || !nextMintUri || !walletClient,
-                      loading: minting,
-                    }}
-                    mediaAspect="3:4"
-                  />
-                ))}
+          )
+        ) : (
+          <>
+            {minting && (
+              <div className="flex justify-center items-center my-2">
+                <span className="loading loading-spinner loading-sm" aria-label="Minting" />
               </div>
-            </>
-          )}
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 my-6 items-stretch mx-auto">
+              {items.slice(0, pagesLoaded * 12).map(nft => (
+                <NFTCard
+                  key={nft.id}
+                  id={nft.id}
+                  name={nft.name || `Token #${nft.id}`}
+                  imageUrl={nft.image || ""}
+                  description={nft.description || ""}
+                  owner={nft.owner || undefined}
+                  mediaAspect="1:1"
+                  ctaPrimary={!nextMintUri ? { label: "Sold out", disabled: true, onClick: () => {} } : undefined}
+                />
+              ))}
+            </div>
+            {items.length > pagesLoaded * 12 && (
+              <div className="flex justify-center mt-4">
+                <button className="btn btn-outline" onClick={() => setPagesLoaded(p => p + 1)}>
+                  Load more
+                </button>
+              </div>
+            )}
+          </>
+        )}
 
-          {/* Refresh and cache status */}
-          <div className="flex justify-center mt-6">
-            <button
-              className="btn btn-sm"
-              onClick={() => {
-                ignoreCacheRef.current = true; // next load bypasses cache
-                // reset loaded address so we can force reload
-                loadedForAddressRef.current = null;
-                // trigger effect by toggling loading via a microtask
-                setLoading(true);
-                setTimeout(() => setLoading(false), 0);
-              }}
-            >
-              Refresh gallery
-            </button>
-            {usedCache && <span className="ml-3 text-sm opacity-60">Loaded from cache</span>}
+        {/* Refresh status only when active */}
+        {ignoreCacheRef.current && (
+          <div className="mt-8 flex items-center justify-start text-xs text-neutral-500">
+            <span>Refreshing…</span>
           </div>
-        </div>
+        )}
 
-        {/* Flow CTAs - pinned to bottom of page area */}
-        <div className="flex justify-between items-center mt-10 mb-2">
+        {/* Footer navigation */}
+        <div className="mt-6 mb-10 flex items-center justify-between">
           <Link href="/" className="btn btn-ghost">
             ← Back: Home
           </Link>
