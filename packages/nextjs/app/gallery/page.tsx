@@ -3,11 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
-import { createPublicClient, formatEther, http } from "viem";
-import { usePublicClient, useWalletClient } from "wagmi";
-import { useScaffoldContract, useScaffoldReadContract } from "~~/hooks/scaffold-eth";
+import { useWalletClient } from "wagmi";
+import { useScaffoldContract } from "~~/hooks/scaffold-eth";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
-import { intuitionTestnet } from "~~/intuition";
 import { NFTCard } from "~~/partials/nft/nft-card";
 import { notification } from "~~/utils/scaffold-eth";
 import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
@@ -69,96 +67,32 @@ const GalleryPage: NextPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [usedCache, setUsedCache] = useState(false);
   const [minting, setMinting] = useState(false);
-  const [mintPriceFallback, setMintPriceFallback] = useState<bigint | null>(null);
 
   const { data: yourCollectibleContract } = useScaffoldContract({ contractName: "YourCollectible" });
   const loadedForAddressRef = useRef<string | null>(null);
   const loadingRef = useRef(false);
   const ignoreCacheRef = useRef(false);
 
-  // Read sale status and price
-  const { data: saleActive } = useScaffoldReadContract({
-    contractName: "YourCollectible",
-    functionName: "saleActive" as any,
-  } as any);
-  const { data: mintPrice } = useScaffoldReadContract({
-    contractName: "YourCollectible",
-    functionName: "mintPrice" as any,
-  } as any);
+  // Static token URIs available for minting (from metadata/manifest.json)
+  const TOKEN_URIS: string[] = [
+    "https://bafybeid23csx6zqebrw4qlkq4lkc4lz4tuk3xtt7jsp7i3gkl4bl5g4nx4.ipfs.w3s.link/image-kitten-01.json",
+    "https://bafybeibdbqusjudzq2254znouotv4fqxodiye5vqp57ulhe5skuiselvuu.ipfs.w3s.link/image-kitten-02.json",
+    "https://bafybeiem2ypnqmmuhkzpxa555bzv3vw7x7g53q2i3mhqmnvw7nuaeeev4a.ipfs.w3s.link/image-kitten-03.json",
+    "https://bafybeiahaisrbsdlvkcxdtzaya4pc4p2sxd6e6czfvn5k4b6ypbuglc6ri.ipfs.w3s.link/image-kitten-04.json",
+    "https://bafybeiey4wcignlnfyietlqp732opz27jm4f3hny2btyekufdmdrs454ke.ipfs.w3s.link/image-kitten-05.json",
+    "https://bafybeiapkbf5idi4we45jahvfzqk5v2h7aggandajyw5wzj4w6js4mwzmi.ipfs.w3s.link/image-kitten-06.json",
+    "https://bafybeifyg7vk5fl2ljlpski6fppof6lqzexwsnnlq47yakxwpirrelqvxm.ipfs.w3s.link/image-kitten-07.json",
+    "https://bafybeig3wma23unyyo77cjz4zk6dewkraqseaycxbvmhu5y2trwewaipfq.ipfs.w3s.link/image-kitten-08.json",
+    "https://bafybeigh6kr3iuil5fh62bovp3byn3jbf2vgs7mrumb442ihu5mv3ftsoi.ipfs.w3s.link/image-kitten-09.json",
+    "https://bafybeibm3ra626vruqamsuiubsl7gr4yto5wquogagd7zpxt34s55bbs7e.ipfs.w3s.link/image-kitten-10.json",
+    "https://bafybeib3ytqqi2k4z3bkozywgjh32vsizkw3hjgnebkwa4tgadl3v5sxfy.ipfs.w3s.link/image-kitten-11.json",
+    "https://bafybeig46duegh3rund26vucqfk2vmjekho2k7hihtatjkcw4epnli6nbi.ipfs.w3s.link/image-kitten-12.json",
+  ];
+  const usedUris = new Set(items.map(i => i.uri));
+  const nextMintUri = TOKEN_URIS.find(u => !usedUris.has(u));
 
-  // Fallback: read mintPrice via viem PublicClient with a minimal ABI if hook returns undefined
-  // Bind to Intuition Testnet explicitly so it doesn't depend on the user's current chain
-  const publicClient = usePublicClient({ chainId: intuitionTestnet.id });
   const { data: walletClient } = useWalletClient();
-  useEffect(() => {
-    let cancelled = false;
-    const loadFallback = async () => {
-      try {
-        if (!yourCollectibleContract?.address) return;
-        if (mintPrice != null) return; // primary source available
-        const address = yourCollectibleContract.address as `0x${string}`;
-        const abi = [
-          {
-            name: "mintPrice",
-            type: "function",
-            stateMutability: "view",
-            inputs: [],
-            outputs: [{ type: "uint256", name: "" }],
-          },
-        ] as const;
-        let value: unknown = null;
-        // Attempt 1: wagmi public client bound to Intuition
-        if (publicClient) {
-          try {
-            value = await publicClient.readContract({ address, abi, functionName: "mintPrice" });
-          } catch {
-            // ignore and try next fallback
-          }
-        }
-        // Attempt 2: wallet client (if it exposes readContract)
-        if (value == null && walletClient) {
-          try {
-            // @ts-ignore
-            value = await walletClient.readContract?.({ address, abi, functionName: "mintPrice" });
-          } catch {
-            // ignore and try next fallback
-          }
-        }
-        // Attempt 3: hard RPC client directly to Intuition Testnet
-        if (value == null) {
-          try {
-            const directClient = createPublicClient({
-              chain: intuitionTestnet,
-              transport: http("https://testnet.rpc.intuition.systems"),
-            });
-            value = await directClient.readContract({ address, abi, functionName: "mintPrice" });
-          } catch {
-            // ignore; give up
-          }
-        }
-        if (value != null && !cancelled) setMintPriceFallback(value as unknown as bigint);
-      } catch {
-        // ignore; no price available via fallbacks
-      }
-    };
-    loadFallback();
-    return () => {
-      cancelled = true;
-    };
-  }, [publicClient, walletClient, yourCollectibleContract?.address, mintPrice]);
-
-  const effectiveMintPrice = (mintPrice as unknown as bigint | null) ?? mintPriceFallback;
-  useEffect(() => {
-    // Debug values to help diagnose if price isn't visible
-
-    console.debug(
-      "Gallery: contract address, effectiveMintPrice",
-      yourCollectibleContract?.address,
-      effectiveMintPrice,
-    );
-  }, [yourCollectibleContract?.address, effectiveMintPrice]);
-
-  // Write: mintKitten
+  // Write: mintItem
   const { writeContractAsync } = useScaffoldWriteContract({ contractName: "YourCollectible" });
 
   const readCache = (addr: string) => {
@@ -355,26 +289,18 @@ const GalleryPage: NextPage = () => {
                 name="Mint your first Kitten"
                 imageUrl=""
                 description="No kittens yet. Mint the first one!"
-                priceLoading={effectiveMintPrice == null}
-                priceAmount={effectiveMintPrice != null ? formatEther(BigInt(effectiveMintPrice as any)) : undefined}
-                priceUnit="TTRUST"
                 ctaPrimary={{
-                  label: minting
-                    ? "Minting…"
-                    : !saleActive
-                      ? "Mint inactive"
-                      : effectiveMintPrice != null
-                        ? `Mint for ${formatEther(BigInt(effectiveMintPrice as any))} TTRUST`
-                        : "Fetching price…",
+                  label: minting ? "Minting…" : nextMintUri ? "Mint" : "Sold out",
                   onClick: async () => {
                     try {
-                      if (effectiveMintPrice == null) return;
+                      const to = walletClient?.account?.address as `0x${string}` | undefined;
+                      if (!to) return notification.error("Connect your wallet to mint");
+                      if (!nextMintUri) return notification.error("No more kittens to mint");
                       setMinting(true);
                       await writeContractAsync(
                         {
-                          functionName: "mintKitten" as any,
-                          args: [] as any,
-                          value: effectiveMintPrice as unknown as bigint,
+                          functionName: "mintItem" as any,
+                          args: [to, nextMintUri] as any,
                         } as any,
                         {
                           blockConfirmations: 1,
@@ -394,7 +320,7 @@ const GalleryPage: NextPage = () => {
                       setMinting(false);
                     }
                   },
-                  disabled: !saleActive || minting || effectiveMintPrice == null,
+                  disabled: minting || !nextMintUri || !walletClient,
                   loading: minting,
                 }}
                 mediaAspect="3:4"
@@ -412,11 +338,6 @@ const GalleryPage: NextPage = () => {
                     name="Minting new Kitten…"
                     imageUrl=""
                     description="Waiting for confirmation…"
-                    priceLoading={effectiveMintPrice == null}
-                    priceAmount={
-                      effectiveMintPrice != null ? formatEther(BigInt(effectiveMintPrice as any)) : undefined
-                    }
-                    priceUnit="TTRUST"
                     ctaPrimary={{
                       label: "Minting…",
                       onClick: () => {},
@@ -434,28 +355,18 @@ const GalleryPage: NextPage = () => {
                     imageUrl={nft.image ?? ""}
                     description={nft.description}
                     owner={nft.owner}
-                    priceLoading={effectiveMintPrice == null}
-                    priceAmount={
-                      effectiveMintPrice != null ? formatEther(BigInt(effectiveMintPrice as any)) : undefined
-                    }
-                    priceUnit="TTRUST"
                     ctaPrimary={{
-                      label: minting
-                        ? "Minting…"
-                        : !saleActive
-                          ? "Mint inactive"
-                          : effectiveMintPrice != null
-                            ? `Mint for ${formatEther(BigInt(effectiveMintPrice as any))} TTRUST`
-                            : "Fetching price…",
+                      label: minting ? "Minting…" : nextMintUri ? "Mint" : "Sold out",
                       onClick: async () => {
                         try {
-                          if (effectiveMintPrice == null) return;
+                          const to = walletClient?.account?.address as `0x${string}` | undefined;
+                          if (!to) return notification.error("Connect your wallet to mint");
+                          if (!nextMintUri) return notification.error("No more kittens to mint");
                           setMinting(true);
                           await writeContractAsync(
                             {
-                              functionName: "mintKitten" as any,
-                              args: [] as any,
-                              value: effectiveMintPrice as unknown as bigint,
+                              functionName: "mintItem" as any,
+                              args: [to, nextMintUri] as any,
                             } as any,
                             {
                               blockConfirmations: 1,
@@ -475,7 +386,7 @@ const GalleryPage: NextPage = () => {
                           setMinting(false);
                         }
                       },
-                      disabled: !saleActive || minting || effectiveMintPrice == null,
+                      disabled: minting || !nextMintUri || !walletClient,
                       loading: minting,
                     }}
                     mediaAspect="3:4"
