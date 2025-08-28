@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useAccount } from "wagmi";
+import { useAccount, usePublicClient } from "wagmi";
 import { useScaffoldContract } from "~~/hooks/scaffold-eth";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
 import { NFTCard } from "~~/partials/nft/nft-card";
@@ -76,6 +76,7 @@ const GalleryPage = () => {
   const ignoreCacheRef = useRef(false);
 
   const { writeContractAsync } = useScaffoldWriteContract({ contractName: "YourCollectible" });
+  const publicClient = usePublicClient({ chainId: 13579 });
 
   const readCache = (addr: string) => {
     try {
@@ -99,9 +100,40 @@ const GalleryPage = () => {
     if (!uri) return;
     try {
       setMintingId(id ?? null);
+      // Pre-simulate to catch revert reasons clearly
+      let bufferedGas: bigint | undefined;
+      try {
+        if (publicClient && yourCollectibleContract) {
+          await publicClient.simulateContract({
+            address: (yourCollectibleContract as any).address,
+            abi: (yourCollectibleContract as any).abi,
+            functionName: "mintItem",
+            args: [connectedAddress as `0x${string}`, uri],
+            account: connectedAddress as `0x${string}`,
+          } as any);
+          // Use explicit gas estimation then add buffer
+          const estGas = await publicClient.estimateContractGas({
+            address: (yourCollectibleContract as any).address,
+            abi: (yourCollectibleContract as any).abi,
+            functionName: "mintItem",
+            args: [connectedAddress as `0x${string}`, uri],
+            account: connectedAddress as `0x${string}`,
+          } as any);
+          bufferedGas = (estGas * 150n) / 100n; // +50%
+        }
+      } catch (simErr: any) {
+        const simMsg = simErr?.shortMessage || simErr?.message || "Simulation failed";
+        setError(simMsg);
+        setMintingId(null);
+        return;
+      }
       await writeContractAsync({
         functionName: "mintItem",
         args: [connectedAddress as `0x${string}`, uri],
+        // Be explicit to avoid provider ambiguity
+        account: connectedAddress as `0x${string}`,
+        chainId: 13579,
+        gas: bufferedGas ?? 800000n,
       } as any);
       // Invalidate cache and refresh
       try {
@@ -113,7 +145,9 @@ const GalleryPage = () => {
       setRefreshKey(k => k + 1);
     } catch (e: any) {
       console.error(e);
-      setError(e?.message || "Mint failed");
+      const msg =
+        e?.shortMessage || e?.message || (typeof e === "string" ? e : "Mint failed. Check network, balance, and URI.");
+      setError(msg);
     } finally {
       setMintingId(null);
     }
