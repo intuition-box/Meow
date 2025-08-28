@@ -58,6 +58,8 @@ export function NFTCard(props: NFTCardProps) {
     selectable,
     selected,
     className,
+    aboveCta,
+    belowCta,
   } = props;
 
   const reduceMotion = useReducedMotion();
@@ -316,6 +318,8 @@ export function NFTCard(props: NFTCardProps) {
           </div>
         )} */}
 
+        {aboveCta && <div className="pb-2">{aboveCta}</div>}
+
         {(ctaPrimary || ctaSecondary || onClick) && (
           <div className="pt-1.5 flex items-center justify-center gap-2">
             {ctaPrimary && (
@@ -360,6 +364,8 @@ export function NFTCard(props: NFTCardProps) {
             )}
           </div>
         )}
+
+        {belowCta && <div className="pt-2">{belowCta}</div>}
       </div>
     </motion.div>
   );

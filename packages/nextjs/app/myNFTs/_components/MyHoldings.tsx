@@ -19,6 +19,7 @@ export const MyHoldings = () => {
   const [myAllCollectibles, setMyAllCollectibles] = useState<Collectible[]>([]);
   const [allCollectiblesLoading, setAllCollectiblesLoading] = useState(false);
   const [transferringId, setTransferringId] = useState<number | null>(null);
+  const [transferAddr, setTransferAddr] = useState<Record<number, string>>({});
 
   const { data: yourCollectibleContract } = useScaffoldContract({
     contractName: "YourCollectible",
@@ -89,8 +90,11 @@ export const MyHoldings = () => {
         notification.error("Connect your wallet to transfer");
         return;
       }
-      const to = window.prompt("Enter recipient address (0x...):")?.trim();
-      if (!to) return;
+      const to = (transferAddr[tokenId] || "").trim();
+      if (!to) {
+        notification.error("Enter a recipient address");
+        return;
+      }
       if (!to.startsWith("0x") || to.length !== 42) {
         notification.error("Invalid address");
         return;
@@ -136,6 +140,17 @@ export const MyHoldings = () => {
               owner={item.owner}
               mediaAspect="1:1"
               size="sm"
+              aboveCta={
+                <div className="w-full flex flex-col gap-2">
+                  <input
+                    type="text"
+                    placeholder="0x recipient address"
+                    className="input input-bordered input-sm w-full"
+                    value={transferAddr[item.id] || ""}
+                    onChange={e => setTransferAddr(prev => ({ ...prev, [item.id]: e.target.value }))}
+                  />
+                </div>
+              }
               ctaPrimary={{
                 label: "Transfer",
                 loading: transferringId === item.id,

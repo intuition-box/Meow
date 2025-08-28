@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export type MediaAspect = "1:1" | "3:4" | "16:9";
 
 export interface NFTCardAction {
@@ -31,4 +33,8 @@ export interface NFTCardProps {
   selectable?: boolean;
   selected?: boolean;
   className?: string;
+  /** Optional custom content rendered just below the CTA buttons area. */
+  belowCta?: ReactNode;
+  /** Optional custom content rendered just above the CTA buttons area. */
+  aboveCta?: ReactNode;
 }
