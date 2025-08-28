@@ -11,13 +11,16 @@ export const NFTCardSkeleton: FC<{ className?: string; withFooter?: boolean }> =
   return (
     <div
       className={clsx(
-        "rounded-xl border border-white/5 bg-neutral-900/60 backdrop-blur-sm shadow-[0_10px_20px_-10px_rgba(0,0,0,0.35)]",
+        "rounded-xl",
+        // Light: no border or surface; Dark: subtle border + surface
+        "bg-transparent dark:border dark:border-white/5 dark:bg-neutral-900/60 dark:backdrop-blur-sm",
+        "shadow-[0_10px_20px_-10px_rgba(0,0,0,0.35)]",
         "overflow-hidden select-none",
         className,
       )}
     >
       <div className="relative w-full aspect-square bg-neutral-800 animate-pulse rounded-t-lg" />
-      <div className="p-4 space-y-2 rounded-b-xl">
+      <div className="p-4 space-y-2 rounded-b-xl bg-[#818cf8]/12 dark:bg-[#818cf8]/10">
         <div className="h-5 w-2/3 rounded-md bg-neutral-800 animate-pulse" />
         <div className="h-4 w-1/2 rounded-md bg-neutral-800 animate-pulse" />
         {withFooter && (

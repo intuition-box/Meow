@@ -132,7 +132,9 @@ export function NFTCard(props: NFTCardProps) {
   const CardInner = (
     <motion.div
       className={clsx(
-        "group relative rounded-xl border border-white/5 bg-neutral-900/60 backdrop-blur-sm",
+        "group relative rounded-xl",
+        // Light mode: no border, transparent bg; Dark mode: subtle border + surface
+        "bg-transparent dark:border dark:border-white/5 dark:bg-neutral-900/60 dark:backdrop-blur-sm",
         "shadow-[0_10px_20px_-10px_rgba(0,0,0,0.35)] transition-all duration-200",
         "overflow-hidden focus:outline-none hover:shadow-[0_18px_28px_-12px_rgba(0,0,0,0.5)] hover:-translate-y-0.5",
         // Make the card fill available height and layout vertically
@@ -212,9 +214,9 @@ export function NFTCard(props: NFTCardProps) {
       {/* Body */}
       <div
         className={clsx(
-          "gap-3 border-t",
-          /* subtle surface that adapts to theme */
-          "bg-base-100/60 dark:bg-[#818cf8]/10 border-[#818cf8]/30",
+          "gap-3",
+          /* lighter in light mode, richer in dark mode */
+          "bg-[#818cf8]/12 dark:bg-[#818cf8]/10",
           "rounded-b-xl",
           // Fill remaining vertical space so background color covers full card height
           "grow flex flex-col",
@@ -223,7 +225,10 @@ export function NFTCard(props: NFTCardProps) {
       >
         <div className="flex-1 flex flex-col gap-2 min-h-[1px]">
           <div className="flex items-start justify-between gap-2">
-            <h3 className={clsx("font-semibold tracking-[-0.01em] text-neutral-100", sizes.title)} title={name}>
+            <h3
+              className={clsx("font-semibold tracking-[-0.01em] text-neutral-800 dark:text-neutral-100", sizes.title)}
+              title={name}
+            >
               <span className="line-clamp-2 leading-snug">{name}</span>
             </h3>
             {href && (
@@ -258,7 +263,7 @@ export function NFTCard(props: NFTCardProps) {
             <p
               ref={descRef}
               className={clsx(
-                "line-clamp-3 text-neutral-300 leading-relaxed",
+                "line-clamp-3 text-neutral-700 dark:text-neutral-300 leading-relaxed",
                 isSingleLineDesc ? "mb-1" : "mb-0",
                 sizes.text,
               )}
@@ -269,16 +274,18 @@ export function NFTCard(props: NFTCardProps) {
           )}
         </div>
 
-        <div className="h-px w-full bg-gradient-to-r from-white/5 via-white/10 to-white/5" />
+        <div className="h-px w-full bg-gradient-to-r from-black/5 via-black/10 to-black/5 dark:from-white/5 dark:via-white/10 dark:to-white/5" />
 
-        <div className="flex items-center justify-between gap-2 text-neutral-400 flex-wrap">
+        <div className="flex items-center justify-between gap-2 text-neutral-500 dark:text-neutral-400 flex-wrap">
           {owner && (
             <div className="flex items-center gap-2 min-w-0">
-              <span className="text-[10px] uppercase tracking-wide text-neutral-500/80">Owner</span>
+              <span className="text-[10px] uppercase tracking-wide text-neutral-600/80 dark:text-neutral-500/80">
+                Owner
+              </span>
               <Tooltip.Provider delayDuration={150}>
                 <Tooltip.Root>
                   <Tooltip.Trigger asChild>
-                    <span className="truncate text-xs font-medium text-neutral-300 tabular-nums tracking-tight">
+                    <span className="truncate text-xs font-medium text-neutral-700 dark:text-neutral-300 tabular-nums tracking-tight">
                       {shortenAddress(owner)}
                     </span>
                   </Tooltip.Trigger>
