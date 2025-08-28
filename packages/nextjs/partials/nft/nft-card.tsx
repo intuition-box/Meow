@@ -48,9 +48,6 @@ export function NFTCard(props: NFTCardProps) {
     imageUrl,
     description,
     owner,
-    priceAmount,
-    priceLoading,
-    priceUnit,
     badgeText,
     mediaAspect = "1:1",
     href,
@@ -288,7 +285,7 @@ export function NFTCard(props: NFTCardProps) {
           )}
         </div>
 
-        {(priceLoading || priceAmount != null) && (
+        {/* {(priceLoading || priceAmount != null) && (
           <div className="mt-1 text-xs text-neutral-400 min-h-[1.25rem] flex items-center gap-2">
             <span className="opacity-80">Price:</span>
             {priceLoading ? (
@@ -298,7 +295,7 @@ export function NFTCard(props: NFTCardProps) {
             )}
             <span>{priceUnit || "TTRUST"}</span>
           </div>
-        )}
+        )} */}
 
         {(ctaPrimary || ctaSecondary || onClick) && (
           <div className="pt-1.5 flex items-center justify-center gap-2">
