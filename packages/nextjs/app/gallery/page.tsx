@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useAccount } from "wagmi";
 import { useScaffoldContract } from "~~/hooks/scaffold-eth";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
 import { NFTCard } from "~~/partials/nft/nft-card";
 import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
 
@@ -62,11 +64,18 @@ const GalleryPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loadedOnce, setLoadedOnce] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  // Mint form state (mintItem)
+  const { address: connectedAddress } = useAccount();
+  const [mintingId, setMintingId] = useState<number | null>(null);
 
   const { data: yourCollectibleContract } = useScaffoldContract({ contractName: "YourCollectible" });
   const loadedForAddressRef = useRef<string | null>(null);
   const loadingRef = useRef(false);
   const ignoreCacheRef = useRef(false);
+
+  const { writeContractAsync } = useScaffoldWriteContract({ contractName: "YourCollectible" });
 
   const readCache = (addr: string) => {
     try {
@@ -78,6 +87,35 @@ const GalleryPage = () => {
       return parsed.items || null;
     } catch {
       return null;
+    }
+  };
+
+  // Direct mint from a card's Token URI to the connected wallet
+  const mintFromCard = async (uri: string, id?: number) => {
+    if (!connectedAddress) {
+      setError("Please connect your wallet to mint");
+      return;
+    }
+    if (!uri) return;
+    try {
+      setMintingId(id ?? null);
+      await writeContractAsync({
+        functionName: "mintItem",
+        args: [connectedAddress as `0x${string}`, uri],
+      } as any);
+      // Invalidate cache and refresh
+      try {
+        const contractAddress = (yourCollectibleContract as any)?.address as string | undefined;
+        if (contractAddress) localStorage.removeItem(`gallery:${contractAddress}`);
+      } catch {}
+      ignoreCacheRef.current = true;
+      loadedForAddressRef.current = null;
+      setRefreshKey(k => k + 1);
+    } catch (e: any) {
+      console.error(e);
+      setError(e?.message || "Mint failed");
+    } finally {
+      setMintingId(null);
     }
   };
 
@@ -234,7 +272,7 @@ const GalleryPage = () => {
     return () => {
       isMounted = false;
     };
-  }, [yourCollectibleContract]);
+  }, [yourCollectibleContract, refreshKey]);
 
   // Render
   return (
@@ -243,6 +281,8 @@ const GalleryPage = () => {
         <div className="mt-10 mb-10 grid grid-cols-1 items-center">
           <h1 className="text-center text-3xl md:text-5xl font-bold">Gallery</h1>
         </div>
+
+        {/* Mint panel removed per request; per-card Mint remains */}
 
         {error && (
           <div className="alert alert-error my-4">
@@ -274,7 +314,15 @@ const GalleryPage = () => {
                   description={nft.description || ""}
                   owner={nft.owner || undefined}
                   mediaAspect="1:1"
-                  ctaPrimary={soldOut ? { label: "Sold out", disabled: true, onClick: () => {} } : undefined}
+                  ctaPrimary={
+                    soldOut
+                      ? {
+                          label: "Mint",
+                          loading: mintingId === nft.id,
+                          onClick: () => mintFromCard(nft.uri, nft.id),
+                        }
+                      : undefined
+                  }
                 />
               ));
             })()}
