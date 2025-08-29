@@ -242,6 +242,49 @@ flowchart LR
   MY -. connect .-> RKC["RainbowKitCustomConnectButton"]:::leaf
 ```
 
+### Hardhat Flow
+
+```mermaid
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "primaryColor": "#1f2937",
+    "primaryTextColor": "#e5e7eb",
+    "primaryBorderColor": "#374151",
+    "lineColor": "#9ca3af",
+    "tertiaryColor": "#111827",
+    "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto"
+  }
+}}%%
+flowchart LR
+  classDef dir fill:#1f2937,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
+  classDef leaf fill:#111827,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
+
+  HH["hardhat/"]:::dir
+  NEXTJS_CON["nextjs/contracts/"]:::dir
+
+  HH --> C["contracts/"]:::leaf
+  HH --> D["deploy/"]:::leaf
+  HH --> CFG["hardhat.config.ts"]:::leaf
+  HH --> ENV[".env"]:::leaf
+  HH --> S["scripts/"]:::leaf
+  HH --> T["test/"]:::leaf
+
+  D --> DEP["deployments/"]:::leaf
+  CFG -. networks, plugins .-> D
+  ENV -. keys .-> D
+
+  C -. compiled to .-> ART["artifacts/"]:::leaf
+  ART -. types .-> TCT["typechain-types/"]:::leaf
+
+  DEP -. ABIs + addresses .-> NEXTJS_CON
+  T -. reads ABIs .-> DEP
+  S -. admin ops .-> C
+
+  %% Example specific deploy file
+  D -. includes .-> D01["01_deploy_your_collectible.ts"]:::leaf
+```
+
 ## Quick Start
 
 1) Requirements
