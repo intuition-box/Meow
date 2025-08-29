@@ -97,60 +97,20 @@
 
 
 
-<h2 align="center">Tech Stack</h2>
+## Tech Stack
 
-<table width="100%" style="table-layout: fixed; width: 100%;">
-  <colgroup>
-    <col style="width: 20%" />
-    <col style="width: 40%" />
-    <col style="width: 40%" />
-  </colgroup>
-  <tr>
-    <th>Category</th>
-    <th>Core Tools</th>
-    <th>Tooling Tools</th>
-  </tr>
-  <tr>
-    <td>Contracts</td>
-    <td>Solidity, Hardhat, OpenZeppelin (ERC721)</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Frontend</td>
-    <td>Next.js 15, React 19, Tailwind 4, DaisyUI</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Web3</td>
-    <td>wagmi, viem, RainbowKit</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>State/Data</td>
-    <td>Zustand, TanStack Query</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Language</td>
-    <td></td>
-    <td>TypeScript</td>
-  </tr>
-  <tr>
-    <td>Quality</td>
-    <td></td>
-    <td>ESLint, Prettier</td>
-  </tr>
-  <tr>
-    <td>Deploy</td>
-    <td></td>
-    <td>Vercel (optional)</td>
-  </tr>
-  <tr>
-    <td>IPFS</td>
-    <td></td>
-    <td>bgipfs</td>
-  </tr>
-</table>
+| Category  | Tools | Purpose |
+|---|---|---|
+| Contracts | Solidity, Hardhat, OpenZeppelin (ERC721) | Smart contracts and standards |
+| Frontend | Next.js 15, React 19, Tailwind, DaisyUI | UI, styling, components |
+| Web3 | wagmi, viem, RainbowKit | Wallet connect and contract calls |
+| Language | TypeScript | Types and DX |
+| Quality | ESLint, Prettier | Linting and formatting |
+| Deploy | hardhat-deploy, Vercel (optional) | Contract + app deployment |
+| IPFS | bgipfs | Static export + upload |
+| API (UI) | Next.js Route Handlers (`app/api/*`) | Server-side endpoints |
+
+
 
 
 
