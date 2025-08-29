@@ -1,42 +1,16 @@
 <h1 align="center">Kitten NFT Gallery</h1>
 <p align="center">
   <a href="https://nfts-sepia.vercel.app/"><img src="https://img.shields.io/website?url=https%3A%2F%2Fnfts-sepia.vercel.app&label=Live%20App&logo=vercel" alt="Live App" /></a>
+  <a href="https://github.com/ChainsQueenEth/web3dashboard/actions/workflows/ci.yml"><img src="https://github.com/ChainsQueenEth/web3dashboard/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <img src="https://img.shields.io/badge/node-%3E%3D20.18.3-339933?logo=node.js&logoColor=white" alt="Node >=20.18.3" />
-  <img src="https://img.shields.io/badge/yarn-3.x-2C8EBB?logo=yarn&logoColor=white" alt="Yarn 3.x" /><a href="https://github.com/ChainsQueenEth/web3dashboard/actions/workflows/ci.yml"><img src="https://github.com/ChainsQueenEth/web3dashboard/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <img src="https://img.shields.io/badge/yarn-3.x-2C8EBB?logo=yarn&logoColor=white" alt="Yarn 3.x" />
 </p>
 
-<p align="center">Modern, full‑stack ERC‑721 NFT dApp powered by Hardhat (contracts) and Next.js (UI).</p>
-
-<table align="center" width="100%">
-  <tr>
-    <td width="50%" valign="top">
-      <b>✅ Local chain</b><br/>
-      Hardhat dev node for rapid iteration<br/>
-      <code>yarn chain</code>
-    </td>
-    <td width="50%" valign="top">
-      <b>🚀 Deployment</b><br/>
-      One‑command deploys via hardhat-deploy<br/>
-      <code>yarn deploy</code>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <b>🧾 Verification</b><br/>
-      Etherscan contract verification<br/>
-      <code>yarn verify</code>
-    </td>
-    <td width="50%" valign="top">
-      <b>🌐 IPFS export</b><br/>
-      Static export + publish with bgipfs<br/>
-      <code>yarn ipfs</code>
-    </td>
-  </tr>
-  </table>
-
 <h2 align="center">Contents</h2>
-
 <p align="center">
+  <a href="#features-at-a-glance">Features at a Glance</a> ·
+  <a href="#ui-showcase">UI Showcase</a> ·
+  <a href="#nft-collection-preview">NFT Collection Preview</a> ·
   <a href="#tech-stack">Tech Stack</a> ·
   <a href="#monorepo-structure">Structure</a> ·
   <a href="#quick-start">Quick Start</a> ·
@@ -46,7 +20,17 @@
   <a href="#ipfs-publishing">IPFS</a> ·
   <a href="#troubleshooting">Troubleshooting</a>
 </p>
- 
+
+<h2 align="center">Features at a Glance</h2>
+
+> Modern, full‑stack ERC‑721 NFT dApp powered by Hardhat (contracts) and Next.js (UI).
+
+- ✅ Local chain — `yarn chain` ![local](https://img.shields.io/badge/hardhat-local-yellow)
+- 🚀 Deployment — `yarn deploy` ![deploy](https://img.shields.io/badge/deploy-hardhat--deploy-blue)
+- 🧾 Verification — `yarn verify` ![verify](https://img.shields.io/badge/etherscan-verify-black)
+- 🌐 IPFS export — `yarn ipfs` ![ipfs](https://img.shields.io/badge/IPFS-publish-0A0A0A)
+
+ <h2 align="center">UI Showcase</h2>
 <p align="center" style="margin: 28px 0 36px;">
   <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/home_page.png" alt="Home page" width="100%" />
@@ -74,12 +58,11 @@
 </p>
 
 
-<h2 align="center">Kitten NFTs</h2>
+<h2 align="center">NFT Collection Preview</h2>
 <p align="center" style="max-width: 720px; margin: 0 auto;">
   <img src="packages/nextjs/public/img/kitten-carousel.gif" alt="Kitten carousel" width="100%" />
   <br />
   <sub>Animated preview of the kitten collection.</sub>
-  
 </p>
 
 
