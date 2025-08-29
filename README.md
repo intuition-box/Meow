@@ -99,7 +99,12 @@
 
 <h2 align="center">Tech Stack</h2>
 
-<table width="100%">
+<table width="100%" style="table-layout: fixed; width: 100%;">
+  <colgroup>
+    <col style="width: 20%" />
+    <col style="width: 40%" />
+    <col style="width: 40%" />
+  </colgroup>
   <tr>
     <th>Category</th>
     <th>Core Tools</th>
