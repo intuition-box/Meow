@@ -99,7 +99,7 @@
 
 <h2 align="center">Tech Stack</h2>
 
-<table width="100%" style="table-layout: fixed; width: 100%; align: center;">
+<table width="100%" style="table-layout: fixed; width: 100%;">
   <colgroup>
     <col style="width: 20%" />
     <col style="width: 40%" />
@@ -156,51 +156,53 @@
 
 ## Monorepo Structure
 
+
 ```mermaid
-flowchart TB
-  %% Top-down orientation so the diagram grows in height as needed
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "primaryColor": "#1f2937",
+    "primaryTextColor": "#e5e7eb",
+    "primaryBorderColor": "#374151",
+    "lineColor": "#9ca3af",
+    "tertiaryColor": "#111827",
+    "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto"
+  }
+}}%%
+flowchart LR
+  classDef dir fill:#1f2937,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
+  classDef leaf fill:#111827,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
 
-  subgraph HARDHAT [packages/hardhat/]
-    C[contracts/]
-    D[deploy/]
-    E[deployments/]
-    Ei[intuition/]
-    El[localhost/]
-    S[scripts/]
-    T[test/]
-  end
+  NFTs["NFTs/"]:::dir
+  PKG["packages/"]:::dir
+  HARDHAT["packages/hardhat/"]:::dir
+  NEXTJS["packages/nextjs/"]:::dir
+  META["metadata/ (NFT JSON, images)"]:::leaf
 
-  subgraph NEXTJS [packages/nextjs/]
-    A[app/]
-    CMP[components/]
-    SRV[services/]
-    CNT[contracts/]
-    DC[deployedContracts.ts]
-    EC[externalContracts.ts]
-    HK[hooks/]
-    U[utils/]
-    PUB[public/]
-  end
+  NFTs --> PKG
+  NFTs --> META
+  PKG --> HARDHAT
+  PKG --> NEXTJS
 
-  %% Structure inside hardhat
-  C --> D
-  D --> E
-  E --> Ei
-  E --> El
+  %% Hardhat subfolders
+  HARDHAT --> HH_C["contracts/"]:::leaf
+  HARDHAT --> HH_D["deploy/"]:::leaf
+  HARDHAT --> HH_DEP["deployments/"]:::leaf
+  HARDHAT --> HH_S["scripts/"]:::leaf
+  HARDHAT --> HH_T["test/"]:::leaf
 
-  %% How nextjs consumes artifacts
-  E -- ABIs & addresses --> DC
-  CNT --> DC
-  CNT --> EC
-
-  %% App uses contracts config
-  DC --> A
-  EC --> A
+  %% Next.js subfolders
+  NEXTJS --> NX_APP["app/"]:::leaf
+  NEXTJS --> NX_CMP["components/"]:::leaf
+  NEXTJS --> NX_CON["contracts/"]:::leaf
+  NEXTJS --> NX_HK["hooks/"]:::leaf
+  NEXTJS --> NX_SRV["services/"]:::leaf
+  NEXTJS --> NX_UTIL["utils/"]:::leaf
+  NEXTJS --> NX_TYPES["types/"]:::leaf
+  NEXTJS --> NX_PART["partials/"]:::leaf
+  NEXTJS --> NX_STY["styles/"]:::leaf
+  NEXTJS --> NX_PUB["public/"]:::leaf
 ```
-
-Legend:
-- __packages/hardhat/__ contracts, deployments, ABIs (`deployments/`).
-- __packages/nextjs/__ Next.js dApp UI consuming ABIs/addresses from `packages/nextjs/contracts/`.
 
 ## Quick Start
 
