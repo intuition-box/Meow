@@ -172,14 +172,12 @@
 flowchart LR
   classDef dir fill:#1f2937,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
   classDef leaf fill:#111827,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
-  classDef hidden fill:none,stroke-width:0,opacity:0;
 
   NFTs["NFTs/"]:::dir
   PKG["packages/"]:::dir
   HARDHAT["hardhat/"]:::dir
   NEXTJS["nextjs/"]:::dir
 
-  A0[ ]:::hidden --> NFTs
   NFTs --> PKG
   PKG --> HARDHAT
   PKG --> NEXTJS
