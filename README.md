@@ -202,6 +202,49 @@ flowchart LR
   NEXTJS --> NX_PUB["public/"]:::leaf
 ```
 
+### UI Structure (Next.js)
+
+```mermaid
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "primaryColor": "#1f2937",
+    "primaryTextColor": "#e5e7eb",
+    "primaryBorderColor": "#374151",
+    "lineColor": "#9ca3af",
+    "tertiaryColor": "#111827",
+    "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto"
+  }
+}}%%
+flowchart LR
+  classDef dir fill:#1f2937,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
+  classDef leaf fill:#111827,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
+
+  NEXTJS["Next.js UI"]:::dir
+
+  NEXTJS --> NX_APP["app/"]:::leaf
+  NEXTJS --> NX_PART["partials/"]:::leaf
+  NEXTJS --> NX_CMP["components/"]:::leaf
+  NEXTJS --> NX_STY["styles/"]:::leaf
+  NEXTJS --> NX_PUB["public/"]:::leaf
+  NEXTJS --> NX_HK["hooks/"]:::leaf
+  NEXTJS --> NX_SRV["services/"]:::leaf
+  NEXTJS --> NX_CON["contracts/"]:::leaf
+  NEXTJS --> NX_UTIL["utils/"]:::leaf
+  NEXTJS --> NX_TYPES["types/"]:::leaf
+
+  NX_APP --> NX_PART
+  NX_PART --> NX_CMP
+  NX_CMP --> NX_HK
+  NX_HK --> NX_SRV
+  NX_HK --> NX_CON
+  NX_CMP --> NX_UTIL
+  NX_CMP -. uses .-> NX_TYPES
+  NX_APP -. styles .-> NX_STY
+  NX_CMP -. styles .-> NX_STY
+  NX_APP -. assets .-> NX_PUB
+```
+
 ## Quick Start
 
 1) Requirements
