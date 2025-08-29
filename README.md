@@ -28,54 +28,40 @@ What you get out of the box:
 - [Troubleshooting](#troubleshooting)
 
 
-<h3>Home & Gallery</h3>
+<h2 align="center">Home</h2>
 <p align="center">
   <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/home_page.png" alt="Home page" width="100%" />
     <br />
-    <sub>Home page</sub>
-  </span>
-  <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
-    <img src="packages/nextjs/public/img/gallery_page.png" alt="Gallery page" width="100%" />
-    <br />
-    <sub>Gallery page</sub>
+    <sub>Welcome screen with wallet connect, featured kittens, and quick links to Gallery and My NFTs.</sub>
   </span>
 </p>
 
-### Sample NFTs
+<h2 align="center">Gallery</h2>
 <p align="center">
-  <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
-    <img src="packages/nextjs/public/img/1_kitten.png" alt="Kitten 1" width="100%" />
+  <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
+    <img src="packages/nextjs/public/img/gallery_page.png" alt="Gallery page" width="100%" />
     <br />
-    <sub>Kitten</sub>
-  </span>
-  <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
-    <img src="packages/nextjs/public/img/2_kitten.png" alt="Kitten 2" width="100%" />
-    <br />
-    <sub>Kitten</sub>
-  </span>
-  <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
-    <img src="packages/nextjs/public/img/3_kitten.png" alt="Kitten 3" width="100%" />
-    <br />
-    <sub>Kitten</sub>
+    <sub>Gallery page with all kittens displayed in a grid layout.</sub>
   </span>
 </p>
+
+<h2 align="center">My NFTs</h2>
 <p align="center">
-  <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
-    <img src="packages/nextjs/public/img/4_kitten.png" alt="Kitten 4" width="100%" />
+  <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
+    <img src="packages/nextjs/public/img/my_nfts_page.png" alt="My NFTs page" width="100%" />
     <br />
-    <sub>Kitten</sub>
+    <sub>My NFTs page with a list of all kittens owned by the user.</sub>
   </span>
-  <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
-    <img src="packages/nextjs/public/img/5_kitten.png" alt="Kitten 5" width="100%" />
-    <br />
-    <sub>Kitten</sub>
-  </span>
-  <span style="display:inline-block; width:32%; text-align:center; vertical-align:top;">
-    <img src="packages/nextjs/public/img/6_kitten.png" alt="Kitten 6" width="100%" />
-    <br />
-    <sub>Kitten</sub>
-  </span>
+</p>
+
+
+<h2 align="center">Kitten NFTs</h2>
+<p align="center">
+  <img src="packages/nextjs/public/img/kitten-carousel.gif" alt="Kitten carousel" width="65%" />
+  <br />
+  <sub>Animated preview of the kitten collection.</sub>
+  
 </p>
 
 ## Tech Stack
