@@ -202,7 +202,7 @@ flowchart LR
   NEXTJS --> NX_PUB["public/"]:::leaf
 ```
 
-### UI Structure (Next.js)
+### UI Routes (Next.js)
 
 ```mermaid
 %%{init: {
@@ -220,29 +220,26 @@ flowchart LR
   classDef dir fill:#1f2937,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
   classDef leaf fill:#111827,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
 
-  NEXTJS["Next.js UI"]:::dir
+  APP["app/ (routes)"]:::dir
 
-  NEXTJS --> NX_APP["app/"]:::leaf
-  NEXTJS --> NX_PART["partials/"]:::leaf
-  NEXTJS --> NX_CMP["components/"]:::leaf
-  NEXTJS --> NX_STY["styles/"]:::leaf
-  NEXTJS --> NX_PUB["public/"]:::leaf
-  NEXTJS --> NX_HK["hooks/"]:::leaf
-  NEXTJS --> NX_SRV["services/"]:::leaf
-  NEXTJS --> NX_CON["contracts/"]:::leaf
-  NEXTJS --> NX_UTIL["utils/"]:::leaf
-  NEXTJS --> NX_TYPES["types/"]:::leaf
+  APP --> HOME["/ (Home)"]:::dir
+  APP --> GALL["/gallery"]:::dir
+  APP --> MY["/myNFTs"]:::dir
 
-  NX_APP --> NX_PART
-  NX_PART --> NX_CMP
-  NX_CMP --> NX_HK
-  NX_HK --> NX_SRV
-  NX_HK --> NX_CON
-  NX_CMP --> NX_UTIL
-  NX_CMP -. uses .-> NX_TYPES
-  NX_APP -. styles .-> NX_STY
-  NX_CMP -. styles .-> NX_STY
-  NX_APP -. assets .-> NX_PUB
+  APP -. layout/providers .-> LYT["layout.tsx"]:::leaf
+  LYT -. wraps .-> PROV["ScaffoldEthAppWithProviders"]:::leaf
+  PROV -. includes .-> HDR["Header"]:::leaf
+  PROV -. includes .-> FTR["Footer"]:::leaf
+
+  HOME -. uses .-> ADDR["Address (scaffold-eth)"]:::leaf
+  HOME -. links .-> GALL
+  HOME -. links .-> MY
+
+  GALL -. renders .-> CARD["NFTCard (partial)"]:::leaf
+  GALL -. reads/writes .-> HOOKS["useScaffoldContract + useScaffoldWriteContract"]:::leaf
+
+  MY -. renders .-> HOLD["MyHoldings"]:::leaf
+  MY -. connect .-> RKC["RainbowKitCustomConnectButton"]:::leaf
 ```
 
 ## Quick Start
