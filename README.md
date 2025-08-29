@@ -12,21 +12,13 @@
 <p align="center">
   <a href="#features-at-a-glance">Features at a Glance</a><br/>
   <a href="#ui-showcase">UI Showcase</a><br/>
-  <a href="#nft-collection-preview">NFT Collection Preview</a><br/>
   <a href="#tech-stack">Tech Stack</a><br/>
-  <a href="#monorepo-structure">Monorepo Structure</a><br/>
-  <a href="#ui-routes-nextjs">UI Routes (Next.js)</a><br/>
-  <a href="#hardhat-flow">Hardhat Flow</a><br/>
-  <a href="#api-route-handlers">API (Route Handlers)</a><br/>
+  <a href="#monorepo-structure">Architecture & Diagrams</a><br/>
   <a href="#quick-start">Quick Start</a><br/>
-  <a href="#environment-variables">Environment Variables</a><br/>
-  <a href="#common-commands">Common Commands</a><br/>
-  <a href="#contract-overview">Contracts</a><br/>
-  <a href="#deployment-notes">Deploy</a><br/>
-  <a href="#ipfs-publishing">IPFS</a><br/>
+  <a href="#common-commands">Usage & Deployment</a><br/>
+  <a href="#contract-overview">Contract Overview</a><br/>
   <a href="#troubleshooting">Troubleshooting</a><br/>
-  <a href="#contributing">Contributing</a><br/>
-  <a href="#license">License</a>
+  <a href="#contributing">Contributing & License</a>
 </p>
 
 
@@ -167,7 +159,7 @@ flowchart LR
 
 _Monorepo folders and key subdirectories._
 
-<h2 align="center">UI Routes (Next.js)</h2>
+<h3 align="center">UI Routes (Next.js)</h3>
 
 ```mermaid
 %%{init: {
@@ -209,14 +201,14 @@ flowchart LR
 
 _Client routes and key components/providers._
 
-<h2 align="center">API (Route Handlers)</h2>
+<h3 align="center">API (Route Handlers)</h3>
 
 | Route | Method | Body | Description |
 |---|---|---|---|
 | `/api/ipfs/add` | POST | JSON (metadata object) | Adds JSON to IPFS via bgipfs utils |
 | `/api/ipfs/get-metadata` | POST | `{ ipfsHash: string }` | Fetches NFT metadata by IPFS hash |
 
-<h2 align="center">Hardhat Flow</h2>
+<h3 align="center">Hardhat Flow</h3>
 
 ```mermaid
 %%{init: {
@@ -273,16 +265,8 @@ _End‑to‑end Hardhat compile → deploy → consume._
 yarn install
 ```
 
-3) Configure envs
-
-- Hardhat: copy `packages/hardhat/.env.example` → `packages/hardhat/.env`
-  - Set: `ALCHEMY_API_KEY`, `ETHERSCAN_V2_API_KEY`
-  - Deployer key: `yarn account:generate` or `yarn account:import`
-- Next.js: copy `packages/nextjs/.env.example` → `packages/nextjs/.env`
-  - Fill any required `NEXT_PUBLIC_*` vars
-
   
-<h2 align="center">Environment Variables</h2>
+<h3 align="center">Environment Variables</h3>
 
 | App | File | Variable | Purpose |
 |---|---|---|---|
@@ -293,7 +277,7 @@ yarn install
 
 > Security: Never commit `.env` files or private keys. Use a separate deployer account with minimal funds for testnets.
 
-4) Run locally
+3) Run locally
 
 ```bash
 # Terminal 1
@@ -369,7 +353,5 @@ You can host your metadata JSON (e.g., in `metadata/`) and images (e.g., `img/`)
 <h2 align="center">Contributing</h2>
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## License
 
 This project is licensed under the terms of the [LICENCE](LICENCE).
