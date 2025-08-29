@@ -101,29 +101,50 @@
 
 <table width="100%">
   <tr>
-    <td width="48%" valign="top">
-      <h3>Core</h3>
-      
-      <ul>
-        <li><b>Contracts:</b> Solidity, Hardhat, OpenZeppelin (ERC721)</li>
-        <li><b>Frontend:</b> Next.js 15, React 19, Tailwind 4, DaisyUI</li>
-        <li><b>Web3:</b> wagmi, viem, RainbowKit</li>
-        <li><b>State/Data:</b> Zustand, TanStack Query</li>
-      </ul>
-    </td>
-    <td width="4%" style="min-width: 24px;">&nbsp;</td>
-    <td width="48%" valign="top">
-      <h3>Tooling</h3>
-      
-      <ul>
-        <li><b>Language:</b> TypeScript</li>
-        <li><b>Quality:</b> ESLint, Prettier</li>
-        <li><b>Deploy:</b> Vercel (optional)</li>
-        <li><b>IPFS:</b> bgipfs</li>
-      </ul>
-    </td>
+    <th>Category</th>
+    <th>Core Tools</th>
+    <th>Tooling Tools</th>
   </tr>
-  
+  <tr>
+    <td>Contracts</td>
+    <td>Solidity, Hardhat, OpenZeppelin (ERC721)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Frontend</td>
+    <td>Next.js 15, React 19, Tailwind 4, DaisyUI</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Web3</td>
+    <td>wagmi, viem, RainbowKit</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>State/Data</td>
+    <td>Zustand, TanStack Query</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Language</td>
+    <td></td>
+    <td>TypeScript</td>
+  </tr>
+  <tr>
+    <td>Quality</td>
+    <td></td>
+    <td>ESLint, Prettier</td>
+  </tr>
+  <tr>
+    <td>Deploy</td>
+    <td></td>
+    <td>Vercel (optional)</td>
+  </tr>
+  <tr>
+    <td>IPFS</td>
+    <td></td>
+    <td>bgipfs</td>
+  </tr>
 </table>
 
 
