@@ -99,7 +99,7 @@
 
 <h2 align="center">Tech Stack</h2>
 
-<table width="100%" style="table-layout: fixed; width: 100%;">
+<table width="100%" style="table-layout: fixed; width: 100%; align: center;">
   <colgroup>
     <col style="width: 20%" />
     <col style="width: 40%" />
