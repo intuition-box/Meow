@@ -9,27 +9,25 @@
 
 
 <h2 align="center">Contents</h2>
-<div align="center" style="margin-top: 8px;">
-  <ul style="list-style: none; padding: 0; margin: 0; text-align: left; display: inline-block;">
-    <li><a href="#features-at-a-glance">Features at a Glance</a></li>
-    <li><a href="#ui-showcase">UI Showcase</a></li>
-    <li><a href="#nft-collection-preview">NFT Collection Preview</a></li>
-    <li><a href="#tech-stack">Tech Stack</a></li>
-    <li><a href="#monorepo-structure">Structure</a></li>
-    <li><a href="#ui-routes-nextjs">UI Routes (Next.js)</a></li>
-    <li><a href="#hardhat-flow">Hardhat Flow</a></li>
-    <li><a href="#api-route-handlers">API (Route Handlers)</a></li>
-    <li><a href="#quick-start">Quick Start</a></li>
-    <li><a href="#environment-variables">Environment Variables</a></li>
-    <li><a href="#common-commands">Commands</a></li>
-    <li><a href="#contract-overview">Contracts</a></li>
-    <li><a href="#deployment-notes">Deploy</a></li>
-    <li><a href="#ipfs-publishing">IPFS</a></li>
-    <li><a href="#troubleshooting">Troubleshooting</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-  </ul>
-  </div>
+<p align="center">
+  <a href="#features-at-a-glance">Features at a Glance</a><br/>
+  <a href="#ui-showcase">UI Showcase</a><br/>
+  <a href="#nft-collection-preview">NFT Collection Preview</a><br/>
+  <a href="#tech-stack">Tech Stack</a><br/>
+  <a href="#monorepo-structure">Structure</a><br/>
+  <a href="#ui-routes-nextjs">UI Routes (Next.js)</a><br/>
+  <a href="#hardhat-flow">Hardhat Flow</a><br/>
+  <a href="#api-route-handlers">API (Route Handlers)</a><br/>
+  <a href="#quick-start">Quick Start</a><br/>
+  <a href="#environment-variables">Environment Variables</a><br/>
+  <a href="#common-commands">Commands</a><br/>
+  <a href="#contract-overview">Contracts</a><br/>
+  <a href="#deployment-notes">Deploy</a><br/>
+  <a href="#ipfs-publishing">IPFS</a><br/>
+  <a href="#troubleshooting">Troubleshooting</a><br/>
+  <a href="#contributing">Contributing</a><br/>
+  <a href="#license">License</a>
+</p>
 
 
 
