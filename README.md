@@ -97,7 +97,7 @@
 
 
 
-## Tech Stack
+<h2 align="center">Tech Stack</h2>
 
 | Category  | Tools | Purpose |
 |---|---|---|
@@ -110,12 +110,9 @@
 | IPFS | bgipfs | Static export + upload |
 | API (UI) | Next.js Route Handlers (`app/api/*`) | Server-side endpoints |
 
+> Architecture: Hardhat compiles/deploys ERC‑721 contracts and writes ABIs/addresses to the repo; the Next.js app (wagmi/viem) consumes them. IPFS is used both for NFT metadata and optional static site publishing.
 
-
-
-
-## Monorepo Structure
-
+<h2 align="center">Monorepo Structure</h2>
 
 ```mermaid
 %%{init: {
@@ -162,7 +159,9 @@ flowchart LR
   NEXTJS --> NX_PUB["public/"]:::leaf
 ```
 
-### UI Routes (Next.js)
+_Monorepo folders and key subdirectories._
+
+<h2 align="center">UI Routes (Next.js)</h2>
 
 ```mermaid
 %%{init: {
@@ -202,7 +201,16 @@ flowchart LR
   MY -. connect .-> RKC["RainbowKitCustomConnectButton"]:::leaf
 ```
 
-### Hardhat Flow
+_Client routes and key components/providers._
+
+### API (Route Handlers)
+
+| Route | Method | Body | Description |
+|---|---|---|---|
+| `/api/ipfs/add` | POST | JSON (metadata object) | Adds JSON to IPFS via bgipfs utils |
+| `/api/ipfs/get-metadata` | POST | `{ ipfsHash: string }` | Fetches NFT metadata by IPFS hash |
+
+<h2 align="center">Hardhat Flow</h2>
 
 ```mermaid
 %%{init: {
@@ -245,7 +253,9 @@ flowchart LR
   D -. includes .-> D01["01_deploy_your_collectible.ts"]:::leaf
 ```
 
-## Quick Start
+_End‑to‑end Hardhat compile → deploy → consume._
+
+<h2 align="center">Quick Start</h2>
 
 1) Requirements
    - Node >= 20.18.3
@@ -265,6 +275,17 @@ yarn install
 - Next.js: copy `packages/nextjs/.env.example` → `packages/nextjs/.env`
   - Fill any required `NEXT_PUBLIC_*` vars
 
+### Environment Variables
+
+| App | File | Variable | Purpose |
+|---|---|---|---|
+| Hardhat | `packages/hardhat/.env` | `ALCHEMY_API_KEY` | RPC provider for deployments/tests |
+| Hardhat | `packages/hardhat/.env` | `ETHERSCAN_V2_API_KEY` | Contract verification |
+| Hardhat | `packages/hardhat/.env` | `DEPLOYER_PRIVATE_KEY` | Deployer account (keep secret) |
+| Next.js | `packages/nextjs/.env` | `NEXT_PUBLIC_*` | Public UI config (chain id, RPC, flags) |
+
+> Security: Never commit `.env` files or private keys. Use a separate deployer account with minimal funds for testnets.
+
 4) Run locally
 
 ```bash
@@ -279,7 +300,9 @@ yarn start
 # Open http://localhost:3000
 ```
 
-## Common Commands
+<h2 align="center">Common Commands</h2>
+<details>
+<summary><b>Show commands</b></summary>
 
 - __Contracts__
   - `yarn compile` – Compile contracts
@@ -302,7 +325,9 @@ yarn start
   - `yarn lint` – Lint (frontend + contracts)
   - `yarn format` – Prettier format
 
-## Contract Overview
+</details>
+
+<h2 align="center">Contract Overview</h2>
 
 [YourCollectible.sol](packages/hardhat/contracts/YourCollectible.sol) (ERC721, Enumerable, URI Storage, Ownable):
 - `mintItem(address to, string uri)` – Mints a token with a full tokenURI.
@@ -312,20 +337,32 @@ yarn start
 
 You can host your metadata JSON (e.g., in `metadata/`) and images (e.g., `img/`) on IPFS and use their IPFS URIs when minting.
 
-## Deployment Notes
+<h2 align="center">Deployment Notes</h2>
 
 - Networks and RPC keys are configured in [packages/hardhat/hardhat.config.ts](packages/hardhat/hardhat.config.ts) and [.env](packages/hardhat/.env).
 - Deployed addresses and ABIs are stored in `packages/hardhat/deployments/` for consumption by the frontend.
 - For Etherscan verification: ensure contracts are flattened/configured or use `yarn verify` with correct constructor args.
 
-## IPFS Publishing
+<h2 align="center">IPFS Publishing</h2>
 
 - `yarn ipfs` will:
   - Build the Next.js app (static export)
   - Upload to IPFS via `bgipfs`, then print the resulting CID and gateway URL
 
-## Troubleshooting
+<h2 align="center">Troubleshooting</h2>
+<details>
+<summary><b>Show troubleshooting</b></summary>
 
 - Ensure Node and Yarn versions match repo engines.
 - If contracts/types are stale: `yarn hardhat:clean && yarn compile`.
 - If wallet connection fails in UI, check the configured chain and RPC in Next.js [.env](packages/nextjs/.env).
+
+</details>
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+This project is licensed under the terms of the [LICENCE](LICENCE).
