@@ -6,6 +6,8 @@
   <img src="https://img.shields.io/badge/yarn-3.x-2C8EBB?logo=yarn&logoColor=white" alt="Yarn 3.x" />
 </p>
 
+
+
 <h2 align="center">Contents</h2>
 <p align="center">
   <a href="#features-at-a-glance">Features at a Glance</a> ·
@@ -20,6 +22,8 @@
   <a href="#ipfs-publishing">IPFS</a> ·
   <a href="#troubleshooting">Troubleshooting</a>
 </p>
+
+
 
 <h2 align="center">Features at a Glance</h2>
 
@@ -52,6 +56,8 @@
   </tr>
 </table>
 
+
+
  <h2 align="center">UI Showcase</h2>
 <p align="center" style="margin: 28px 0 36px;">
   <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
@@ -62,6 +68,7 @@
 </p>
 
 
+
 <p align="center" style="margin: 28px 0 36px;">
   <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/gallery_page.png" alt="Gallery page" width="100%" />
@@ -69,6 +76,7 @@
     <sub>Gallery page with all kittens displayed in a grid layout.</sub>
   </span>
 </p>
+
 
 
 <p align="center" style="margin: 28px 0 36px;">
@@ -89,16 +97,27 @@
 
 
 
+<h2 align="center">Tech Stack</h2>
 
-## Tech Stack
+<h3 align="center">Core</h3>
 
-| Category   | Tools |
-|------------|-------|
-| Contracts  | Solidity, Hardhat, hardhat-deploy, OpenZeppelin (ERC721, Enumerable, URI Storage) |
-| Frontend   | Next.js 15, React 19, Tailwind CSS 4, DaisyUI |
-| Web3       | wagmi, viem, RainbowKit |
-| State/Data | Zustand, TanStack Query |
-| Utilities  | TypeScript, ESLint, Prettier, bgipfs (IPFS), Vercel (optional) |
+| Category   | Tools                                   |
+|------------|------------------------------------------|
+| Contracts  | Solidity, Hardhat, OpenZeppelin (ERC721) |
+| Frontend   | Next.js 15, React 19, Tailwind 4, DaisyUI|
+| Web3       | wagmi, viem, RainbowKit                  |
+| State/Data | Zustand, TanStack Query                  |
+
+<h3 align="center">Tooling</h3>
+
+| Category | Tools                      |
+|----------|-----------------------------|
+| Language | TypeScript                  |
+| Quality  | ESLint, Prettier            |
+| Deploy   | Vercel (optional)           |
+| IPFS     | bgipfs                      |
+
+
 
 ## Monorepo Structure
 
