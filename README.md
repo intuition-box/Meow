@@ -29,7 +29,7 @@ What you get out of the box:
 
 
 <h2 align="center">Home</h2>
-<p align="center">
+<p align="center" style="margin: 28px 0 36px;">
   <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/home_page.png" alt="Home page" width="100%" />
     <br />
@@ -38,7 +38,7 @@ What you get out of the box:
 </p>
 
 <h2 align="center">Gallery</h2>
-<p align="center">
+<p align="center" style="margin: 28px 0 36px;">
   <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/gallery_page.png" alt="Gallery page" width="100%" />
     <br />
@@ -47,7 +47,7 @@ What you get out of the box:
 </p>
 
 <h2 align="center">My NFTs</h2>
-<p align="center">
+<p align="center" style="margin: 28px 0 36px;">
   <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/my_nfts_page.png" alt="My NFTs page" width="100%" />
     <br />
