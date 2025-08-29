@@ -9,19 +9,27 @@
 
 
 <h2 align="center">Contents</h2>
-<p align="center">
-  <a href="#features-at-a-glance">Features at a Glance</a> ·
-  <a href="#ui-showcase">UI Showcase</a> ·
-  <a href="#nft-collection-preview">NFT Collection Preview</a> ·
-  <a href="#tech-stack">Tech Stack</a> ·
-  <a href="#monorepo-structure">Structure</a> ·
-  <a href="#quick-start">Quick Start</a> ·
-  <a href="#common-commands">Commands</a> ·
-  <a href="#contract-overview">Contracts</a> ·
-  <a href="#deployment-notes">Deploy</a> ·
-  <a href="#ipfs-publishing">IPFS</a> ·
-  <a href="#troubleshooting">Troubleshooting</a>
-</p>
+<div align="center" style="margin-top: 8px;">
+  <ul style="list-style: none; padding: 0; margin: 0; text-align: left; display: inline-block;">
+    <li><a href="#features-at-a-glance">Features at a Glance</a></li>
+    <li><a href="#ui-showcase">UI Showcase</a></li>
+    <li><a href="#nft-collection-preview">NFT Collection Preview</a></li>
+    <li><a href="#tech-stack">Tech Stack</a></li>
+    <li><a href="#monorepo-structure">Structure</a></li>
+    <li><a href="#ui-routes-nextjs">UI Routes (Next.js)</a></li>
+    <li><a href="#hardhat-flow">Hardhat Flow</a></li>
+    <li><a href="#api-route-handlers">API (Route Handlers)</a></li>
+    <li><a href="#quick-start">Quick Start</a></li>
+    <li><a href="#environment-variables">Environment Variables</a></li>
+    <li><a href="#common-commands">Commands</a></li>
+    <li><a href="#contract-overview">Contracts</a></li>
+    <li><a href="#deployment-notes">Deploy</a></li>
+    <li><a href="#ipfs-publishing">IPFS</a></li>
+    <li><a href="#troubleshooting">Troubleshooting</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+  </ul>
+  </div>
 
 
 
@@ -203,7 +211,7 @@ flowchart LR
 
 _Client routes and key components/providers._
 
-### API (Route Handlers)
+<h2 align="center">API (Route Handlers)</h2>
 
 | Route | Method | Body | Description |
 |---|---|---|---|
@@ -275,7 +283,8 @@ yarn install
 - Next.js: copy `packages/nextjs/.env.example` → `packages/nextjs/.env`
   - Fill any required `NEXT_PUBLIC_*` vars
 
-### Environment Variables
+  
+<h2 align="center">Environment Variables</h2>
 
 | App | File | Variable | Purpose |
 |---|---|---|---|
@@ -359,7 +368,7 @@ You can host your metadata JSON (e.g., in `metadata/`) and images (e.g., `img/`)
 
 </details>
 
-## Contributing
+<h2 align="center">Contributing</h2>
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
