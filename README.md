@@ -25,10 +25,32 @@
 
 > Modern, full‑stack ERC‑721 NFT dApp powered by Hardhat (contracts) and Next.js (UI).
 
-- ✅ Local chain — `yarn chain` ![local](https://img.shields.io/badge/hardhat-local-yellow)
-- 🚀 Deployment — `yarn deploy` ![deploy](https://img.shields.io/badge/deploy-hardhat--deploy-blue)
-- 🧾 Verification — `yarn verify` ![verify](https://img.shields.io/badge/etherscan-verify-black)
-- 🌐 IPFS export — `yarn ipfs` ![ipfs](https://img.shields.io/badge/IPFS-publish-0A0A0A)
+<table align="center" width="100%">
+  <tr>
+    <td width="50%" valign="top">
+      <b>✅ Local chain</b><br/>
+      Hardhat dev node for rapid iteration<br/>
+      <code>yarn chain</code>
+    </td>
+    <td width="50%" valign="top">
+      <b>🚀 Deployment</b><br/>
+      One‑command deploys via hardhat-deploy<br/>
+      <code>yarn deploy</code>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <b>🧾 Verification</b><br/>
+      Etherscan contract verification<br/>
+      <code>yarn verify</code>
+    </td>
+    <td width="50%" valign="top">
+      <b>🌐 IPFS export</b><br/>
+      Static export + publish with bgipfs<br/>
+      <code>yarn ipfs</code>
+    </td>
+  </tr>
+</table>
 
  <h2 align="center">UI Showcase</h2>
 <p align="center" style="margin: 28px 0 36px;">
