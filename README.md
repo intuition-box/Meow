@@ -1,4 +1,4 @@
-# Kitten NFT Gallery
+<h1 align="center">Kitten NFT Gallery</h1>
 
 Browse a playful kitten collection and view the NFTs you own.
 
@@ -16,7 +16,18 @@ What you get out of the box:
 - __Verification__: Etherscan verification (`yarn verify`).
 - __IPFS export__: Static export + publish with `bgipfs` (`yarn ipfs`).
 
+<h2 align="center">Contents</h2>
 
+<p align="center">
+  <a href="#tech-stack">Tech Stack</a> ·
+  <a href="#monorepo-structure">Structure</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#common-commands">Commands</a> ·
+  <a href="#contract-overview">Contracts</a> ·
+  <a href="#deployment-notes">Deploy</a> ·
+  <a href="#ipfs-publishing">IPFS</a> ·
+  <a href="#troubleshooting">Troubleshooting</a>
+</p>
  
 <p align="center" style="margin: 28px 0 36px;">
   <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
@@ -53,19 +64,8 @@ What you get out of the box:
   
 </p>
 
-<hr style="max-width:720px; margin: 16px auto;" />
-<h2 align="center">Contents</h2>
 
-<p align="center">
-  <a href="#tech-stack">Tech Stack</a> ·
-  <a href="#monorepo-structure">Structure</a> ·
-  <a href="#quick-start">Quick Start</a> ·
-  <a href="#common-commands">Commands</a> ·
-  <a href="#contract-overview">Contracts</a> ·
-  <a href="#deployment-notes">Deploy</a> ·
-  <a href="#ipfs-publishing">IPFS</a> ·
-  <a href="#troubleshooting">Troubleshooting</a>
-</p>
+
 
 ## Tech Stack
 
