@@ -8,17 +8,16 @@
 
 
 
-<h2 align="center">Contents</h2>
 <p align="center">
   <a href="#features-at-a-glance">Features at a Glance</a><br/>
   <a href="#ui-showcase">UI Showcase</a><br/>
   <a href="#tech-stack">Tech Stack</a><br/>
-  <a href="#monorepo-structure">Architecture & Diagrams</a><br/>
+  <a href="#architecture--diagrams">Architecture & Diagrams</a><br/>
   <a href="#quick-start">Quick Start</a><br/>
-  <a href="#common-commands">Usage & Deployment</a><br/>
-  <a href="#contract-overview">Contract Overview</a><br/>
+  <a href="#usage--deployment">Usage & Deployment</a><br/>
+  <a href="#deployment-notes">Deployment Notes</a><br/>
   <a href="#troubleshooting">Troubleshooting</a><br/>
-  <a href="#contributing">Contributing & License</a>
+  <a href="#contributing--license">Contributing & License</a>
 </p>
 
 
@@ -86,7 +85,7 @@
 </p>
 
 
-<h2 align="center">NFT Collection Preview</h2>
+<h3 align="center">NFT Collection Preview</h3>
 <p align="center" style="max-width: 720px; margin: 0 auto;">
   <img src="packages/nextjs/public/img/kitten-carousel.gif" alt="Kitten carousel" width="100%" />
   <br />
@@ -110,7 +109,9 @@
 
 > Architecture: Hardhat compiles/deploys ERC‑721 contracts and writes ABIs/addresses to the repo; the Next.js app (wagmi/viem) consumes them. IPFS is used both for NFT metadata and optional static site publishing.
 
-<h2 align="center">Monorepo Structure</h2>
+<h2 align="center">Architecture & Diagrams</h2>
+
+<h3 align="center">Monorepo Structure</h3>
 
 ```mermaid
 %%{init: {
@@ -290,8 +291,9 @@ yarn compile && yarn deploy
 yarn start
 # Open http://localhost:3000
 ```
+<h2 align="center">Usage & Deployment</h2>
 
-<h2 align="center">Common Commands</h2>
+<h3 align="center">Common Commands</h3>
 <details>
 <summary><b>Show commands</b></summary>
 
@@ -318,7 +320,7 @@ yarn start
 
 </details>
 
-<h2 align="center">Contract Overview</h2>
+<h3 align="center">Contract Overview</h3>
 
 [YourCollectible.sol](packages/hardhat/contracts/YourCollectible.sol) (ERC721, Enumerable, URI Storage, Ownable):
 - `mintItem(address to, string uri)` – Mints a token with a full tokenURI.
@@ -334,7 +336,7 @@ You can host your metadata JSON (e.g., in `metadata/`) and images (e.g., `img/`)
 - Deployed addresses and ABIs are stored in `packages/hardhat/deployments/` for consumption by the frontend.
 - For Etherscan verification: ensure contracts are flattened/configured or use `yarn verify` with correct constructor args.
 
-<h2 align="center">IPFS Publishing</h2>
+<h3 align="center">IPFS Publishing</h3>
 
 - `yarn ipfs` will:
   - Build the Next.js app (static export)
@@ -350,7 +352,7 @@ You can host your metadata JSON (e.g., in `metadata/`) and images (e.g., `img/`)
 
 </details>
 
-<h2 align="center">Contributing</h2>
+<h2 align="center">Contributing & License</h2>
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
