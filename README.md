@@ -99,11 +99,11 @@
 
 <h2 align="center">Tech Stack</h2>
 
-<table width="100%" style="table-layout: fixed; width: 100%;">
+<table width="100%" style="width: 100%; border-collapse: collapse; word-break: break-word;">
   <colgroup>
-    <col style="width: 20%" />
-    <col style="width: 40%" />
-    <col style="width: 40%" />
+    <col style="width: 6%" />
+    <col style="width: 47%" />
+    <col style="width: 47%" />
   </colgroup>
   <tr>
     <th>Category</th>
@@ -112,43 +112,35 @@
   </tr>
   <tr>
     <td>Contracts</td>
-    <td>Solidity, Hardhat, OpenZeppelin (ERC721)</td>
-    <td></td>
+    <td colspan="2">Solidity, Hardhat, OpenZeppelin (ERC721)</td>
   </tr>
   <tr>
     <td>Frontend</td>
-    <td>Next.js 15, React 19, Tailwind 4, DaisyUI</td>
-    <td></td>
+    <td colspan="2">Next.js 15, React 19, Tailwind 4, DaisyUI</td>
   </tr>
   <tr>
     <td>Web3</td>
-    <td>wagmi, viem, RainbowKit</td>
-    <td></td>
+    <td colspan="2">wagmi, viem, RainbowKit</td>
   </tr>
   <tr>
     <td>State/Data</td>
-    <td>Zustand, TanStack Query</td>
-    <td></td>
+    <td colspan="2">Zustand, TanStack Query</td>
   </tr>
   <tr>
     <td>Language</td>
-    <td></td>
-    <td>TypeScript</td>
+    <td colspan="2">TypeScript</td>
   </tr>
   <tr>
     <td>Quality</td>
-    <td></td>
-    <td>ESLint, Prettier</td>
+    <td colspan="2">ESLint, Prettier</td>
   </tr>
   <tr>
     <td>Deploy</td>
-    <td></td>
-    <td>Vercel (optional)</td>
+    <td colspan="2">Vercel (optional)</td>
   </tr>
   <tr>
     <td>IPFS</td>
-    <td></td>
-    <td>bgipfs</td>
+    <td colspan="2">bgipfs</td>
   </tr>
 </table>
 
