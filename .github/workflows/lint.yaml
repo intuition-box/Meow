@@ -38,3 +38,9 @@ jobs:
 
       - name: Check typings on nextjs
         run: yarn next:check-types
+
+      - name: Check dead exports on nextjs
+        run: |
+          DEAD=$(yarn -s workspace @se-2/nextjs dead-exports)
+          echo "$DEAD"
+          test -z "$DEAD"
