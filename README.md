@@ -16,19 +16,8 @@ What you get out of the box:
 - __Verification__: Etherscan verification (`yarn verify`).
 - __IPFS export__: Static export + publish with `bgipfs` (`yarn ipfs`).
 
-## Contents
 
-- [Tech Stack](#tech-stack)
-- [Monorepo Structure](#monorepo-structure)
-- [Quick Start](#quick-start)
-- [Common Commands](#common-commands)
-- [Contract Overview](#contract-overview)
-- [Deployment Notes](#deployment-notes)
-- [IPFS Publishing](#ipfs-publishing)
-- [Troubleshooting](#troubleshooting)
-
-
-<h2 align="center">Home</h2>
+ 
 <p align="center" style="margin: 28px 0 36px;">
   <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/home_page.png" alt="Home page" width="100%" />
@@ -37,7 +26,7 @@ What you get out of the box:
   </span>
 </p>
 
-<h2 align="center">Gallery</h2>
+
 <p align="center" style="margin: 28px 0 36px;">
   <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/gallery_page.png" alt="Gallery page" width="100%" />
@@ -46,7 +35,7 @@ What you get out of the box:
   </span>
 </p>
 
-<h2 align="center">My NFTs</h2>
+
 <p align="center" style="margin: 28px 0 36px;">
   <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/my_nfts_page.png" alt="My NFTs page" width="100%" />
@@ -57,11 +46,25 @@ What you get out of the box:
 
 
 <h2 align="center">Kitten NFTs</h2>
-<p align="center">
-  <img src="packages/nextjs/public/img/kitten-carousel.gif" alt="Kitten carousel" width="65%" />
+<p align="center" style="max-width: 720px; margin: 0 auto;">
+  <img src="packages/nextjs/public/img/kitten-carousel.gif" alt="Kitten carousel" width="100%" />
   <br />
   <sub>Animated preview of the kitten collection.</sub>
   
+</p>
+
+<hr style="max-width:720px; margin: 16px auto;" />
+<h2 align="center">Contents</h2>
+
+<p align="center">
+  <a href="#tech-stack">Tech Stack</a> ·
+  <a href="#monorepo-structure">Structure</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#common-commands">Commands</a> ·
+  <a href="#contract-overview">Contracts</a> ·
+  <a href="#deployment-notes">Deploy</a> ·
+  <a href="#ipfs-publishing">IPFS</a> ·
+  <a href="#troubleshooting">Troubleshooting</a>
 </p>
 
 ## Tech Stack
