@@ -99,23 +99,34 @@
 
 <h2 align="center">Tech Stack</h2>
 
-<h3 align="center">Core</h3>
-
-| Category   | Tools                                   |
-|------------|------------------------------------------|
-| Contracts  | Solidity, Hardhat, OpenZeppelin (ERC721) |
-| Frontend   | Next.js 15, React 19, Tailwind 4, DaisyUI|
-| Web3       | wagmi, viem, RainbowKit                  |
-| State/Data | Zustand, TanStack Query                  |
-
-<h3 align="center">Tooling</h3>
-
-| Category | Tools                      |
-|----------|-----------------------------|
-| Language | TypeScript                  |
-| Quality  | ESLint, Prettier            |
-| Deploy   | Vercel (optional)           |
-| IPFS     | bgipfs                      |
+<table width="100%">
+  <tr>
+    <td width="48%" valign="top">
+      <h3>Core</h3>
+      
+      <table>
+        <tr><th>Category</th><th>Tools</th></tr>
+        <tr><td>Contracts</td><td>Solidity, Hardhat, OpenZeppelin (ERC721)</td></tr>
+        <tr><td>Frontend</td><td>Next.js 15, React 19, Tailwind 4, DaisyUI</td></tr>
+        <tr><td>Web3</td><td>wagmi, viem, RainbowKit</td></tr>
+        <tr><td>State/Data</td><td>Zustand, TanStack Query</td></tr>
+      </table>
+    </td>
+    <td width="4%" style="min-width: 24px;">&nbsp;</td>
+    <td width="48%" valign="top">
+      <h3>Tooling</h3>
+      
+      <table>
+        <tr><th>Category</th><th>Tools</th></tr>
+        <tr><td>Language</td><td>TypeScript</td></tr>
+        <tr><td>Quality</td><td>ESLint, Prettier</td></tr>
+        <tr><td>Deploy</td><td>Vercel (optional)</td></tr>
+        <tr><td>IPFS</td><td>bgipfs</td></tr>
+      </table>
+    </td>
+  </tr>
+  
+</table>
 
 
 
