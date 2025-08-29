@@ -175,12 +175,10 @@ flowchart LR
 
   NFTs["NFTs/"]:::dir
   PKG["packages/"]:::dir
-  HARDHAT["packages/hardhat/"]:::dir
-  NEXTJS["packages/nextjs/"]:::dir
-  META["metadata/ (NFT JSON, images)"]:::leaf
+  HARDHAT["hardhat/"]:::dir
+  NEXTJS["nextjs/"]:::dir
 
   NFTs --> PKG
-  NFTs --> META
   PKG --> HARDHAT
   PKG --> NEXTJS
 
