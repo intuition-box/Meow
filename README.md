@@ -14,13 +14,13 @@
   <a href="#ui-showcase">UI Showcase</a><br/>
   <a href="#nft-collection-preview">NFT Collection Preview</a><br/>
   <a href="#tech-stack">Tech Stack</a><br/>
-  <a href="#monorepo-structure">Structure</a><br/>
+  <a href="#monorepo-structure">Monorepo Structure</a><br/>
   <a href="#ui-routes-nextjs">UI Routes (Next.js)</a><br/>
   <a href="#hardhat-flow">Hardhat Flow</a><br/>
   <a href="#api-route-handlers">API (Route Handlers)</a><br/>
   <a href="#quick-start">Quick Start</a><br/>
   <a href="#environment-variables">Environment Variables</a><br/>
-  <a href="#common-commands">Commands</a><br/>
+  <a href="#common-commands">Common Commands</a><br/>
   <a href="#contract-overview">Contracts</a><br/>
   <a href="#deployment-notes">Deploy</a><br/>
   <a href="#ipfs-publishing">IPFS</a><br/>
