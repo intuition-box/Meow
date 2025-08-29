@@ -5,13 +5,34 @@
   <img src="https://img.shields.io/badge/yarn-3.x-2C8EBB?logo=yarn&logoColor=white" alt="Yarn 3.x" /><a href="https://github.com/ChainsQueenEth/web3dashboard/actions/workflows/ci.yml"><img src="https://github.com/ChainsQueenEth/web3dashboard/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
 </p>
 
-Modern, full‑stack ERC‑721 NFT dApp powered by Hardhat (contracts) and Next.js (UI).
+<p align="center">Modern, full‑stack ERC‑721 NFT dApp powered by Hardhat (contracts) and Next.js (UI).</p>
 
-What you get out of the box:
-- __Local chain__: Hardhat dev node for rapid iteration (`yarn chain`).
-- __Deployment__: One‑command deploys via `hardhat-deploy` (`yarn deploy`).
-- __Verification__: Etherscan verification (`yarn verify`).
-- __IPFS export__: Static export + publish with `bgipfs` (`yarn ipfs`).
+<table align="center" width="100%">
+  <tr>
+    <td width="50%" valign="top">
+      <b>✅ Local chain</b><br/>
+      Hardhat dev node for rapid iteration<br/>
+      <code>yarn chain</code>
+    </td>
+    <td width="50%" valign="top">
+      <b>🚀 Deployment</b><br/>
+      One‑command deploys via hardhat-deploy<br/>
+      <code>yarn deploy</code>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <b>🧾 Verification</b><br/>
+      Etherscan contract verification<br/>
+      <code>yarn verify</code>
+    </td>
+    <td width="50%" valign="top">
+      <b>🌐 IPFS export</b><br/>
+      Static export + publish with bgipfs<br/>
+      <code>yarn ipfs</code>
+    </td>
+  </tr>
+  </table>
 
 <h2 align="center">Contents</h2>
 
