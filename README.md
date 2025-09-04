@@ -1,6 +1,6 @@
 <h1 align="center">Kitten NFT Gallery</h1>
 <p align="center">
-  <a href="https://nfts-sepia.vercel.app/"><img src="https://img.shields.io/website?url=https%3A%2F%2Fnfts-sepia.vercel.app&label=Live%20App&logo=vercel" alt="Live App" /></a>
+  <a href="https://meow.intuition.box/"><img src="https://img.shields.io/website?url=https%3A%2F%2Fmeow.intuition.box%2F&label=Live%20App&logo=vercel" alt="Live App" /></a>
   <a href="https://github.com/ChainsQueenEth/web3dashboard/actions/workflows/ci.yml"><img src="https://github.com/ChainsQueenEth/web3dashboard/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <img src="https://img.shields.io/badge/node-%3E%3D20.18.3-339933?logo=node.js&logoColor=white" alt="Node >=20.18.3" />
   <img src="https://img.shields.io/badge/yarn-3.x-2C8EBB?logo=yarn&logoColor=white" alt="Yarn 3.x" />
@@ -9,58 +9,63 @@
 
 
 <p align="center">
-  <a href="#features-at-a-glance">Features at a Glance</a><br/>
-  <a href="#ui-showcase">UI Showcase</a><br/>
-  <a href="#tech-stack">Tech Stack</a><br/>
-  <a href="#architecture--diagrams">Architecture & Diagrams</a><br/>
-  <a href="#quick-start">Quick Start</a><br/>
-  <a href="#usage--deployment">Usage & Deployment</a><br/>
-  <a href="#deployment-notes">Deployment Notes</a><br/>
-  <a href="#troubleshooting">Troubleshooting</a><br/>
-  <a href="#contributing--license">Contributing & License</a>
+  <a href="#start-here">🚀 Start here</a> ·
+  <a href="#features">✨ Features</a> ·
+  <a href="#env">🔧 Environment</a> ·
+  <a href="#ui-showcase">🖥️ User Interface</a> ·
+  <a href="#tech-stack">🧰 Tech Stack</a> ·
+  <a href="#structure">📂 Structure</a> ·
+  <a href="#quick-start">⚡ Quick Start</a> ·
+  <a href="#usage">📦 Usage & Deployment</a> ·
+  <a href="#troubleshooting">🛠️ Troubleshooting</a> ·
+  <a href="#contract">📜 Contract</a> ·
+  <a href="#glossary">📖 Glossary</a>
 </p>
 
 
 
-<h2 align="center">Features at a Glance</h2>
+<h2 id="start-here" align="center">🚀 New here? Start here (2 minutes)</h2>
 
-> Modern, full‑stack ERC‑721 NFT dApp powered by Hardhat (contracts) and Next.js (UI).
+1. [CWD](#glossary-cwd): `/`
+   - `yarn install`
+   - `yarn chain`
+   - `yarn compile && yarn deploy --network hardhat`
+   - `yarn start` → open http://localhost:3000
+2. To deploy on Intuition later: `yarn deploy --network intuition`
+3. Environment file for contracts: `packages/hardhat/.env`
+   - `ALCHEMY_API_KEY`,
+   - `__RUNTIME_DEPLOYER_PRIVATE_KEY`,
+   - `ETHERSCAN_V2_API_KEY` (optional).
 
-<table align="center" width="100%">
-  <tr>
-    <td width="50%" valign="top">
-      <b>✅ Local chain</b><br/>
-      Hardhat dev node for rapid iteration<br/>
-      <code>yarn chain</code>
-    </td>
-    <td width="50%" valign="top">
-      <b>🚀 Deployment</b><br/>
-      One‑command deploys via hardhat-deploy<br/>
-      <code>yarn deploy</code>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <b>🧾 Verification</b><br/>
-      Etherscan contract verification<br/>
-      <code>yarn verify</code>
-    </td>
-    <td width="50%" valign="top">
-      <b>🌐 IPFS export</b><br/>
-      Static export + publish with bgipfs<br/>
-      <code>yarn ipfs</code>
-    </td>
-  </tr>
-</table>
+
+<h2 id="features" align="center">✨ Features</h2>
+
+- Modern [ERC‑721](#glossary-erc-721) dApp: Hardhat (contracts) + Next.js (UI)
+- Aggregated “My [NFTs](#glossary-nft)” across mapped [ERC‑721](#glossary-erc-721) contracts on the active chain
+- [IPFS](#glossary-ipfs) metadata with gateway fallbacks
+- Wallet connect and on‑chain reads via wagmi/viem
+- Fast local dev (yarn chain · yarn deploy · yarn start)
 
 
 
- <h2 align="center">UI Showcase</h2>
+<h2 id="env" align="center">🔧 Environment Variables</h2>
+
+| App | File | Keys | Purpose |
+| --- | --- | --- | --- |
+| Hardhat | `packages/hardhat/.env` | `__RUNTIME_DEPLOYER_PRIVATE_KEY` | Deployer account used for `yarn deploy` |
+| Hardhat | `packages/hardhat/.env` | `ALCHEMY_API_KEY` (or full RPC URL) | RPC provider for deployments/tests |
+| Hardhat | `packages/hardhat/.env` | `ETHERSCAN_V2_API_KEY` (optional) | Contract verification (if supported) |
+| Next.js | `packages/nextjs/.env` | `NEXT_PUBLIC_*` | Public UI config (chain id, RPC, flags) |
+
+Note: Never commit `.env` files. Use separate, low‑funded accounts for testnets.
+
+
+ <h2 id="ui-showcase" align="center">🖥️ User Interface</h2>
 <p align="center" style="margin: 28px 0 36px;">
   <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
     <img src="packages/nextjs/public/img/home_page.png" alt="Home page" width="100%" />
     <br />
-    <sub>Welcome screen with wallet connect, featured kittens, and quick links to Gallery and My NFTs.</sub>
+    <sub>Welcome screen with wallet connect, a featured kitten, and quick links to Gallery and My NFTs.</sub>
   </span>
 </p>
 
@@ -76,185 +81,35 @@
 
 
 
-<p align="center" style="margin: 28px 0 36px;">
-  <span style="display:inline-block; width:49%; text-align:center; vertical-align:top;">
-    <img src="packages/nextjs/public/img/my_nfts_page.png" alt="My NFTs page" width="100%" />
-    <br />
-    <sub>My NFTs page with a list of all kittens owned by the user.</sub>
-  </span>
-</p>
+<h2 id="tech-stack" align="center">🧰 Tech Stack (short)</h2>
+
+- Solidity + Hardhat (OpenZeppelin ERC‑721)
+- Next.js (React, Tailwind, DaisyUI)
+- wagmi/viem
+- TypeScript
+- ESLint/Prettier
+- Optional: IPFS static export
+
+<h2 id="structure" align="center">📂 Structure (brief)</h2>
+
+- `packages/hardhat/` – Solidity contracts, deploy scripts, deployments
+- `packages/nextjs/` – Next.js app (app/, partials/, utils/, contracts/)
 
 
-<h3 align="center">NFT Collection Preview</h3>
-<p align="center" style="max-width: 720px; margin: 0 auto;">
-  <img src="packages/nextjs/public/img/kitten-carousel.gif" alt="Kitten carousel" width="100%" />
-  <br />
-  <sub>Animated preview of the kitten collection.</sub>
-</p>
+<h2 align="center">🔧 Environment Variables</h2>
 
 
-
-<h2 align="center">Tech Stack</h2>
-
-| Category  | Tools | Purpose |
-|---|---|---|
-| Contracts | Solidity, Hardhat, OpenZeppelin (ERC721) | Smart contracts and standards |
-| Frontend | Next.js 15, React 19, Tailwind, DaisyUI | UI, styling, components |
-| Web3 | wagmi, viem, RainbowKit | Wallet connect and contract calls |
-| Language | TypeScript | Types and DX |
-| Quality | ESLint, Prettier | Linting and formatting |
-| Deploy | hardhat-deploy, Vercel (optional) | Contract + app deployment |
-| IPFS | bgipfs | Static export + upload |
-| API (UI) | Next.js Route Handlers (`app/api/*`) | Server-side endpoints |
-
-> Architecture: Hardhat compiles/deploys ERC‑721 contracts and writes ABIs/addresses to the repo; the Next.js app (wagmi/viem) consumes them. IPFS is used both for NFT metadata and optional static site publishing.
-
-<h2 align="center">Architecture & Diagrams</h2>
-
-<h3 align="center">Monorepo Structure</h3>
-
-```mermaid
-%%{init: {
-  "theme": "base",
-  "themeVariables": {
-    "primaryColor": "#1f2937",
-    "primaryTextColor": "#e5e7eb",
-    "primaryBorderColor": "#374151",
-    "lineColor": "#9ca3af",
-    "tertiaryColor": "#111827",
-    "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto"
-  }
-}}%%
-flowchart LR
-  classDef dir fill:#1f2937,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
-  classDef leaf fill:#111827,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
-
-  NFTs["NFTs/"]:::dir
-  PKG["packages/"]:::dir
-  HARDHAT["hardhat/"]:::dir
-  NEXTJS["nextjs/"]:::dir
-
-  NFTs --> PKG
-  PKG --> HARDHAT
-  PKG --> NEXTJS
-
-  %% Hardhat subfolders
-  HARDHAT --> HH_C["contracts/"]:::leaf
-  HARDHAT --> HH_D["deploy/"]:::leaf
-  HARDHAT --> HH_DEP["deployments/"]:::leaf
-  HARDHAT --> HH_S["scripts/"]:::leaf
-  HARDHAT --> HH_T["test/"]:::leaf
-
-  %% Next.js subfolders
-  NEXTJS --> NX_APP["app/"]:::leaf
-  NEXTJS --> NX_CMP["components/"]:::leaf
-  NEXTJS --> NX_CON["contracts/"]:::leaf
-  NEXTJS --> NX_HK["hooks/"]:::leaf
-  NEXTJS --> NX_SRV["services/"]:::leaf
-  NEXTJS --> NX_UTIL["utils/"]:::leaf
-  NEXTJS --> NX_TYPES["types/"]:::leaf
-  NEXTJS --> NX_PART["partials/"]:::leaf
-  NEXTJS --> NX_STY["styles/"]:::leaf
-  NEXTJS --> NX_PUB["public/"]:::leaf
-```
-
-_Monorepo folders and key subdirectories._
-
-<h3 align="center">UI Routes (Next.js)</h3>
-
-```mermaid
-%%{init: {
-  "theme": "base",
-  "themeVariables": {
-    "primaryColor": "#1f2937",
-    "primaryTextColor": "#e5e7eb",
-    "primaryBorderColor": "#374151",
-    "lineColor": "#9ca3af",
-    "tertiaryColor": "#111827",
-    "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto"
-  }
-}}%%
-flowchart LR
-  classDef dir fill:#1f2937,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
-  classDef leaf fill:#111827,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
-
-  APP["app/ (routes)"]:::dir
-
-  APP --> HOME["/ (Home)"]:::dir
-  APP --> GALL["/gallery"]:::dir
-  APP --> MY["/myNFTs"]:::dir
-
-  APP -. layout/providers .-> LYT["layout.tsx"]:::leaf
-  LYT -. wraps .-> PROV["ScaffoldEthAppWithProviders"]:::leaf
-  PROV -. includes .-> HDR["Header"]:::leaf
-  PROV -. includes .-> FTR["Footer"]:::leaf
-
-  HOME -. uses .-> ADDR["Address (scaffold-eth)"]:::leaf
-  HOME -. links .-> GALL
-  HOME -. links .-> MY
-
-  GALL -. renders .-> CARD["NFTCard (partial)"]:::leaf
-  GALL -. reads/writes .-> HOOKS["useScaffoldContract + useScaffoldWriteContract"]:::leaf
-
-  MY -. renders .-> HOLD["MyHoldings"]:::leaf
-  MY -. connect .-> RKC["RainbowKitCustomConnectButton"]:::leaf
-```
-
-_Client routes and key components/providers._
-
-<h3 align="center">API (Route Handlers)</h3>
-
-| Route | Method | Body | Description |
+| App | File | Variable | Purpose |
 |---|---|---|---|
-| `/api/ipfs/add` | POST | JSON (metadata object) | Adds JSON to IPFS via bgipfs utils |
-| `/api/ipfs/get-metadata` | POST | `{ ipfsHash: string }` | Fetches NFT metadata by IPFS hash |
+| Hardhat | `packages/hardhat/.env` | `ALCHEMY_API_KEY` | RPC provider for deployments/tests |
+| Hardhat | `packages/hardhat/.env` | `ETHERSCAN_V2_API_KEY` | Contract verification |
+| Hardhat | `packages/hardhat/.env` | `__RUNTIME_DEPLOYER_PRIVATE_KEY` | Deployer account (keep secret) |
+| Next.js | `packages/nextjs/.env` | `NEXT_PUBLIC_*` | Public UI config (chain id, RPC, flags) |
 
-<h3 align="center">Hardhat Flow</h3>
+> Security: Never commit `.env` files or private keys. Use a separate deployer account with minimal funds for testnets.
 
-```mermaid
-%%{init: {
-  "theme": "base",
-  "themeVariables": {
-    "primaryColor": "#1f2937",
-    "primaryTextColor": "#e5e7eb",
-    "primaryBorderColor": "#374151",
-    "lineColor": "#9ca3af",
-    "tertiaryColor": "#111827",
-    "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto"
-  }
-}}%%
-flowchart LR
-  classDef dir fill:#1f2937,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
-  classDef leaf fill:#111827,stroke:#374151,color:#e5e7eb,rx:4,ry:4;
 
-  HH["hardhat/"]:::dir
-  NEXTJS_CON["nextjs/contracts/"]:::dir
-
-  HH --> C["contracts/"]:::leaf
-  HH --> D["deploy/"]:::leaf
-  HH --> CFG["hardhat.config.ts"]:::leaf
-  HH --> ENV[".env"]:::leaf
-  HH --> S["scripts/"]:::leaf
-  HH --> T["test/"]:::leaf
-
-  D --> DEP["deployments/"]:::leaf
-  CFG -. networks, plugins .-> D
-  ENV -. keys .-> D
-
-  C -. compiled to .-> ART["artifacts/"]:::leaf
-  ART -. types .-> TCT["typechain-types/"]:::leaf
-
-  DEP -. ABIs + addresses .-> NEXTJS_CON
-  T -. reads ABIs .-> DEP
-  S -. admin ops .-> C
-
-  %% Example specific deploy files
-  D -. includes .-> D02["02_deploy_kittens.ts"]:::leaf
-```
-
-_End‑to‑end Hardhat compile → deploy → consume._
-
-<h2 align="center">Quick Start</h2>
+<h2 id="quick-start" align="center">⚡ Quick Start (Yarn)</h2>
 
 1) Requirements
    - Node >= 20.18.3
@@ -265,45 +120,6 @@ _End‑to‑end Hardhat compile → deploy → consume._
 ```bash
 yarn install
 ```
-
-  
-<h3 align="center">Environment Variables</h3>
-
-| App | File | Variable | Purpose |
-|---|---|---|---|
-| Hardhat | `packages/hardhat/.env` | `ALCHEMY_API_KEY` | RPC provider for deployments/tests |
-| Hardhat | `packages/hardhat/.env` | `ETHERSCAN_V2_API_KEY` | Contract verification |
-| Hardhat | `packages/hardhat/.env` | `DEPLOYER_PRIVATE_KEY` | Deployer account (keep secret) |
-| Next.js | `packages/nextjs/.env` | `NEXT_PUBLIC_*` | Public UI config (chain id, RPC, flags) |
-
-> Security: Never commit `.env` files or private keys. Use a separate deployer account with minimal funds for testnets.
-
-<h4>Contracts quick commands</h4>
-
-- __Compile contracts__
-
-  ```bash
-  yarn hardhat:compile
-  ```
-
-  Compiles Solidity sources in `packages/hardhat/contracts/` and generates artifacts + typechain types. Run this after changing contracts or on a fresh checkout.
-
-- __Deploy to Intuition testnet__
-
-  ```bash
-  yarn hardhat:deploy --network intuition
-  ```
-
-  Uses `hardhat-deploy` to execute scripts in `packages/hardhat/deploy/` against the `intuition` network.
-
-  Requirements:
-  - `packages/hardhat/.env`: set `DEPLOYER_PRIVATE_KEY` (funded test account)
-  - `ALCHEMY_API_KEY` or an RPC URL configured for `intuition` in `hardhat.config.ts`
-
-  Output:
-  - Writes ABIs and addresses to `packages/hardhat/deployments/`
-  - The Next.js app reads these to interact with the deployed contracts
-
 3) Run locally
 
 ```bash
@@ -317,48 +133,114 @@ yarn compile && yarn deploy
 yarn start
 # Open http://localhost:3000
 ```
-<h2 align="center">Usage & Deployment</h2>
 
-<h3 align="center">Common Commands</h3>
-<details>
-<summary><b>Show commands</b></summary>
+<h2 id="usage" align="center">📦 Usage & Deployment</h2>
 
-- __Contracts__
-  - `yarn compile` – Compile contracts
-  - `yarn test` – Run tests on Hardhat network
-  - `yarn deploy` – Deploy using `hardhat-deploy` (uses deployer key)
-  - `yarn verify` – Verify on Etherscan (set `ETHERSCAN_V2_API_KEY`)
-  - `yarn hardhat:flatten` – Flatten contracts
-  - Accounts utils:
-    - `yarn account` – List account(s)
-    - `yarn account:generate` – Generate deployer
-    - `yarn account:import` – Import private key
-    - `yarn account:reveal-pk` – Reveal stored PK
+<a id="glossary-cwd"></a>
+<h3 align="center">Commands</h3>
 
-- __Frontend__
-  - `yarn start` – Next.js dev
-  - `yarn next:build` / `yarn next:serve` – Build/serve
-  - `yarn ipfs` – Static export + upload to IPFS via bgipfs
+<h4 align="center">⚙️ Contracts</h4>
 
-- __Quality__
-  - `yarn lint` – Lint (frontend + contracts)
-  - `yarn format` – Prettier format
+<h5 align="center">Contract Setup & Build</h5>
 
-</details>
+| CWD | Command | Description |
+| --- | --- | --- |
+| / | `yarn install` | Installs all workspace dependencies. |
+| / | `yarn compile` | Compiles Solidity, generates artifacts and TypeChain types. |
+| / | `yarn test` | Runs Hardhat tests on the in‑memory Hardhat network. |
+| / | `yarn hardhat:flatten` | Creates a single Solidity file by merging a contract and its imports. |
 
-<h3 align="center">Contract Overview</h3>
+<h5 align="center">Deploy & Verify</h5>
+
+| CWD | Command | Description |
+| --- | --- | --- |
+| / | `yarn deploy --network intuition` | Deploys contracts to Intuition (via hardhat‑deploy) and generates TS ABIs. |
+| / | `yarn verify --network intuition` | Verifies contracts from deployments on the Intuition explorer (if supported). |
+
+<h3 align="center">Accounts & Keys</h3>
+
+| CWD | Command | Description |
+| --- | --- | --- |
+| / | `yarn account` | Lists the encrypted deployer account and balances across configured networks. |
+| / | `yarn account:generate` | Generates a new deployer, encrypts it, and stores `DEPLOYER_PRIVATE_KEY_ENCRYPTED` in `packages/hardhat/.env`. |
+| / | `yarn account:import` | Imports your deployer private key into `packages/hardhat/.env` (required to deploy to Intuition). |
+| / | `yarn account:reveal-pk` | Reveals the decrypted private key from `DEPLOYER_PRIVATE_KEY_ENCRYPTED` (use with caution). |
+
+<h5 align="center">Network & Console</h5>
+
+| CWD | Command | Description |
+| --- | --- | --- |
+| / | `yarn chain` | Starts a local Hardhat [JSON‑RPC](#glossary-json-rpc) node. |
+| / | `yarn workspace @se-2/hardhat hardhat console --network intuition` | Interactive console to read/write contract state on Intuition. |
+| / | `yarn workspace @se-2/hardhat hardhat run scripts/debug-tokenuri.ts --network intuition` | Runs a script against Intuition. |
+
+<a id="glossary-rpc"></a><a id="glossary-json-rpc"></a>
+
+<h4 align="center">🖥️ Frontend</h4>
+
+| CWD | Command | Description |
+| --- | --- | --- |
+| / | `yarn start` | Starts the Next.js dev server at `http://localhost:3000`. |
+| / | `yarn next:build` | Builds the Next.js app for production. |
+| / | `yarn next:serve` | Serves the production build locally. |
+| / | `yarn ipfs` | Static export and upload to [IPFS](#glossary-ipfs) via bgipfs. |
+
+<h4 align="center">✅ Quality</h4>
+
+| CWD | Command | Description |
+| --- | --- | --- |
+| / | `yarn lint` | Runs ESLint across frontend and contracts. |
+| / | `yarn format` | Formats code with Prettier. |
+
+<h2 id="troubleshooting" align="center">🛠️ Troubleshooting</h2>
+
+<h3 align="center">🔑 Environment</h3>
+
+| Issue | Fix |
+| --- | --- |
+| Environment not set | Set `__RUNTIME_DEPLOYER_PRIVATE_KEY`. Optional: `ALCHEMY_API_KEY` (not needed for Intuition), `ETHERSCAN_V2_API_KEY` (if explorer supports API verification). |
+| Deploy cannot sign | Ensure `__RUNTIME_DEPLOYER_PRIVATE_KEY` is set; then `yarn deploy --network intuition`. |
+
+<h3 align="center">🚀 Deploy & Verify</h3>
+
+| Issue | Fix |
+| --- | --- |
+| Intuition verification | If `yarn verify --network intuition` fails, use: `yarn workspace @se-2/hardhat hardhat verify --network intuition <address> [args...]`. |
+
+<h3 align="center">🖼️ Metadata</h3>
+
+| Issue | Fix |
+| --- | --- |
+| Metadata not showing | Run: `CONTRACT_ADDRESS=0x089... TOKEN_ID=1 FETCH=1 yarn workspace @se-2/hardhat hardhat run --network intuition scripts/debug-tokenuri.ts`. |
+
+<h3 align="center">🛠️ Local Dev</h3>
+
+| Issue | Fix |
+| --- | --- |
+| [CWD](#glossary-cwd) basics | Repo root: `/NFTs`; Hardhat: `/packages/hardhat`; Next.js: `/packages/nextjs`. |
+| Port in use / local node issues | Stop any running nodes or change ports; retry `yarn chain`. |
+| Stale artifacts or types | `yarn workspace @se-2/hardhat hardhat clean && yarn compile`. |
+| Frontend not picking up new contracts | Re-deploy or re-run compile to regenerate TS ABIs. |
 
 
+<a id="glossary-uri"></a><a id="glossary-tokenuri"></a><a id="glossary-erc-721"></a><a id="glossary-nft"></a>
+<h2 id="contract" align="center">📜 Contract (overview)</h2>
 
-**Kittens.sol** (`packages/hardhat/contracts/Kittens.sol`)
-- ERC721 + Enumerable + URI Storage + Ownable
-- `MAX_SUPPLY = 12`, `MINT_PRICE = 0.05 ether`, `saleActive` toggle
-- `mintItem(address to, string uri)` – public mint (paid, respects sale/price/cap)
-- `mintBatch(address to, string[] uris)` – onlyOwner batch mint
-- Emits `Minted(tokenId, to, uri)`; sequential token IDs starting at 1
+File: `packages/hardhat/contracts/Kittens.sol`
+- Constructor: expects an `owner` address (read from `OWNER_ADDRESS` in `.env`), otherwise defaults to the `deployer` named account.
+- [ERC‑721](#glossary-erc-721) Enumerable + [URI](#glossary-uri) Storage + Ownable
+- Key funcs: `mintItem(address to, string uri)`, `mintBatch(address to, string[] uris)`, transfers via standard `safeTransferFrom/transferFrom`
+- Constants: `MAX_SUPPLY = 12`, `MINT_PRICE = 0.05 ether`
+- Emits: `Minted(tokenId, to, uri)`
 
-You can host your metadata JSON (e.g., `metadata/`) and images on IPFS and use their IPFS URIs when minting.
+Mint examples (Hardhat console):
+```js
+const c = await ethers.getContractAt("Kittens", (await deployments.get("Kittens")).address);
+await c.mintItem("0xYOUR_ADDRESS", "ipfs://<CID>/image-kitten-01.json", { value: ethers.parseEther("0.05") });
+await c.mintBatch("0xYOUR_ADDRESS", ["ipfs://<CID>/image-kitten-01.json", "ipfs://<CID>/image-kitten-02.json"]);
+```
 
+<a id="glossary-ipfs"></a><a id="glossary-cid"></a>
 <h3 align="center">Kittens Auto‑Mint Recap</h3>
 
 **Prepared auto‑mint env** in `packages/hardhat/.env`:
@@ -394,66 +276,52 @@ await c.tokenURI(1);
 **Avoid duplicate auto‑mints**
 - In `packages/hardhat/.env`, set `MINT_AFTER_DEPLOY=false` once done (keep `MINT_URIS` for reference).
 
-<h3 align="center">YourCollectible Deploy Recap</h3>
+<h3 align="center">About the deploy script: 02_deploy_kittens.ts</h3>
 
-**Plain deploy** (no auto‑mint) using `packages/hardhat/deploy/01_deploy_your_collectible.ts`:
+| Field | Details |
+| --- | --- |
+| Path | `packages/hardhat/deploy/02_deploy_kittens.ts` |
+| What it is | `hardhat-deploy` script for `Kittens.sol`. Scripts in `deploy/` run automatically on `yarn deploy`. |
+| How it runs | CWD `/`: `yarn deploy --network <network>` • CWD `packages/hardhat/`: `yarn hardhat deploy --network <network>` |
+| Inputs | `namedAccounts.deployer` (from `packages/hardhat/hardhat.config.ts`); `.env`: `__RUNTIME_DEPLOYER_PRIVATE_KEY`; Optional: `OWNER_ADDRESS`, `MINT_AFTER_DEPLOY`, `MINT_URIS`, `MINT_KITTEN_IDS` |
+| Outputs | Writes `packages/hardhat/deployments/<network>/Kittens.json` (address + ABI); triggers TS ABI generation read by the frontend |
+| Tips | Idempotent re‑runs; for upgrades, add a new script (e.g., `03_deploy_kittens_v2.ts`); target with `--tags Kittens` |
 
-```
-yarn workspace @se-2/hardhat deploy --network intuition
-```
+<a id="glossary-dotenv"></a>
+<h3 align="center">About Hardhat config: hardhat.config.ts</h3>
 
-This deploys `YourCollectible` with no constructor arguments. It does not mint by itself.
+| Field | Details |
+| --- | --- |
+| Path | `packages/hardhat/hardhat.config.ts` |
+| What it is | Central config for Solidity, networks (e.g., `intuition`), plugins, verification, named accounts. |
+| Key responsibilities | Defines `solidity` compiler/optimizer; declares networks (RPC + key); configures verification and `hardhat-deploy`; sets `namedAccounts.deployer`; extends `deploy` to generate TS ABIs. |
+| How pieces connect | `.env` → `hardhat.config.ts` → `yarn deploy --network intuition` uses account + RPC → `02_deploy_kittens.ts` deploys → `deployments/<network>` written → extended task generates ABIs → Next.js reads addresses/ABIs. |
+| Useful commands | `/`: `yarn deploy --network intuition` • `/`: `yarn verify --network intuition` • `/`: `yarn workspace @se-2/hardhat hardhat console --network intuition` |
 
-**Mint from console (examples)**
-- Path: `packages/hardhat/`
-- Console: `yarn hardhat console --network intuition`
+<a id="glossary-abi"></a><a id="glossary-ts-abi"></a>
+<h3 align="center">Where ABIs and addresses live</h3>
 
-Mint a single token with explicit URI:
-```js
-const yc = await ethers.getContractAt("YourCollectible", (await deployments.get("YourCollectible")).address);
-await yc.mintItem("0xYOUR_ADDRESS", "ipfs://<CID>/image-kitten-01.json");
-```
+| Field | Details |
+| --- | --- |
+| Deployments | `packages/hardhat/deployments/<network>/Kittens.json` (address + ABI written by hardhat-deploy) |
+| Frontend artifacts | Check imports in `packages/nextjs/` and shared artifacts in `packages/nextjs/contracts/` |
+| Refresh if out of sync | Run `yarn compile` or `yarn deploy --network <network>` |
 
-Batch mint multiple URIs:
-```js
-const uris = [
-  "ipfs://<CID>/image-kitten-01.json",
-  "ipfs://<CID>/image-kitten-02.json",
-  "ipfs://<CID>/image-kitten-03.json",
-];
-await yc.mintBatch("0xYOUR_ADDRESS", uris);
-```
+Reference: hardhat-deploy docs — https://github.com/wighawag/hardhat-deploy
 
-**Verify (optional)**
-```js
-(await yc.totalSupply()).toString();
-await yc.tokenURI(1);
-```
+<h2 id="glossary" align="center">📖 Glossary</h2>
 
-<h2 align="center">Deployment Notes</h2>
-
-- Networks and RPC keys are configured in [packages/hardhat/hardhat.config.ts](packages/hardhat/hardhat.config.ts) and [.env](packages/hardhat/.env).
-- Deployed addresses and ABIs are stored in `packages/hardhat/deployments/` for consumption by the frontend.
-- For Etherscan verification: ensure contracts are flattened/configured or use `yarn verify` with correct constructor args.
-
-<h3 align="center">IPFS Publishing</h3>
-
-- `yarn ipfs` will:
-  - Build the Next.js app (static export)
-  - Upload to IPFS via `bgipfs`, then print the resulting CID and gateway URL
-
-<h2 align="center">Troubleshooting</h2>
-<details>
-<summary><b>Show troubleshooting</b></summary>
-
-- Ensure Node and Yarn versions match repo engines.
-- If contracts/types are stale: `yarn hardhat:clean && yarn compile`.
-- If wallet connection fails in UI, check the configured chain and RPC in Next.js [.env](packages/nextjs/.env).
-
-</details>
-
-<h2 align="center">Contributing & License</h2>
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-This project is licensed under the terms of the [LICENCE](LICENCE).
+| Short | Full name | Simple explanation |
+| --- | --- | --- |
+| [RPC](#glossary-rpc) | Nuotolinio procedūrų iškvietimas | Galinis taškas, per kurį programa bendrauja su blokų grandinės mazgu. |
+| [JSON‑RPC](#glossary-json-rpc) | JSON formato nuotolinio procedūrų iškvietimas | Standartinis užklausų/atsakymų protokolas (HTTP/WebSocket), kurį naudoja Ethereum mazgai. |
+| [ABI](#glossary-abi) | Programų dvejetainė sąsaja | Sutarties metodų ir įvykių aprašai; leidžia koduoti/dekoduoti kvietimus. |
+| [TS ABI](#glossary-ts-abi) | TypeScript ABI tipai | Sugeneruoti TypeScript tipai pagal ABI, kad sutarties kvietimai būtų tipizuoti. |
+| [ERC‑721](#glossary-erc-721) | Ethereum NFT standartas 721 | Standartas unikaliems (nefungibiliems) žetonams, pvz., NFT. |
+| [IPFS](#glossary-ipfs) | Tarpplanetinė failų sistema | Decentralizuota saugykla NFT metaduomenims ir vaizdams. |
+| [CID](#glossary-cid) | Turinį identifikuojantis kodas | Hash‑o tipo identifikatorius, nurodantis turinį IPFS tinkle. |
+| [CWD](#glossary-cwd) | Dabartinis darbinis katalogas | Aplankas, kuriame vykdote komandą. |
+| [.env](#glossary-dotenv) | Aplinkos kintamųjų failas | Vietinis failas, kuriame laikomos slaptos reikšmės ir konfigūracija (neįkeliamas į git). |
+| [URI](#glossary-uri) | Vieningasis išteklių identifikatorius | Bendras ištekliaus adresas, pvz., `ipfs://...`. |
+| [TokenURI](#glossary-tokenuri) | Žetono metaduomenų URI | Adresas, kur laikomi NFT metaduomenys (dažnai `ipfs://...`). |
+| [NFT](#glossary-nft) | Nefungibilus žetonas | Unikalus skaitmeninis turtas blokų grandinėje. |

@@ -33,12 +33,24 @@ export default defineConfig([
       "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/no-explicit-any": "off",
 
+      // Strict maintainability thresholds
+      // Reason: Keep files small and cognitive load manageable for contributors and reviewers
+      "max-lines": ["error", { max: 500, skipBlankLines: true, skipComments: true }],
+      complexity: ["error", { max: 15 }],
+
       "prettier/prettier": [
         "warn",
         {
           endOfLine: "auto",
         },
       ],
+    },
+  },
+  // Relax complexity rule only for deployment scripts to avoid false positives on imperative deploy flows
+  {
+    files: ["deploy/**/*.ts"],
+    rules: {
+      complexity: "off",
     },
   },
 ]);
